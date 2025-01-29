@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.tibco.bpm.auth</groupId>
+	<artifactId>authentication-bld</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0.svn2git-SNAPSHOT</version>
+	<name>Authentication Micro Service</name>
+	<description>Authentication MicroService implementation</description>
+	
+	<parent>
+		<groupId>com.tibco.bpm</groupId>
+		<artifactId>bpme-root</artifactId>
+		<version>1.0.svn2git-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+
+	<properties>
+		<image.name>bpm-docker.emea.tibco.com:443/runtime/containeredition:1.0.dev</image.name>
+		<svn.base.url>https://emea-swi-svn.emea.tibco.com/svn/WBPM/ace</svn.base.url>
+		<branch>${svn.base.url}/trunk</branch>
+		<base.repository.dir>build-artifacts</base.repository.dir>
+		<auth.kar.dir>${base.repository.dir}/repository/repository/com/tibco/bpm/karaf/ace/com.tibco.bpm.karaf.auth-kar/1.0.0/com.tibco.bpm.karaf.auth-kar-1.0.0</auth.kar.dir>
+	</properties>
+
+	<modules>
+		<module>com.tibco.bpm.auth.api.feature</module>
+		<module>com.tibco.bpm.karaf.deps.feature</module>
+		<module>com.tibco.tpcl.bpm.org.spring.security.feature</module>
+		<module>com.tibco.bpm.auth.core.feature</module>
+		<module>com.tibco.bpm.auth.openid.feature</module>
+		<module>com.tibco.bpm.auth.saml.feature</module>		
+	</modules>
+
+	<build>
+		<plugins>
+			<!-- Clear 'build-artifact' directory -->
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.4.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${base.repository.dir}</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>				
+		</plugins>		
+	</build>
+	
+</project>

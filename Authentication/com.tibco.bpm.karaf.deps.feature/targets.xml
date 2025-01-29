@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="feature-build-targets">
+	<dirname property="feature-build-targets.dir" file="${ant.file.feature-build-targets}" />
+
+	<!-- Optionally import the N2 build overridestargets, default to a configuration directory, but can be overriden to common/configuration -->
+	<property name="autobuild.wbpm.overrides.folder" value="${autobuild.dir.release-unit}/configuration" />
+	<import file="${autobuild.wbpm.overrides.folder}/targets.xml" optional="true"/>
+</project>

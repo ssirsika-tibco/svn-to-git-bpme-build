@@ -1,0 +1,116 @@
+swagger: "2.0"
+info:
+  title: Authenticaction Service
+  description: The TIBCO(R) BPM Enterprise Authentication Manager Service provides interface to authtenticate using the Basic authentication.Basic authenticaion needs to be provided when this service is invoked.
+  termsOfService: ../../app-cdn/public/legal/end-user-license-agreement.pdf
+  contact:
+    name: TIBCO Software Inc.
+    url: http://www.tibco.com
+    email: support@tibco.com
+  license:
+    name: TIBCO Software Inc.
+    url: http://www.tibco.com
+  version: 0.0.1
+schemes:
+  - http
+  - https
+basePath: /bpm/auth/v1
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+  - name: Authenication
+    description: Operations on authentication
+paths:
+  /authenticate:
+    get:
+      summary: Authenticates the user based on the Basic authorization header provided.
+      description: "If the authenticates is successsful will return 200, if invoked in a valid authentication session will retun logged in user info."
+      tags:
+        - Authentication
+      operationId: authenticate
+      responses:
+        '200':
+          description: Returns 200 after a successful authentication.
+        '400':
+          description: Error if the request is invalid.
+          schema:
+            $ref: "#/definitions/Error"
+        '403':
+          description: Forbidden - The logged in User is not authenticated, or does not have access to the requested resource(s). See the error details for more information.
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: Error if the resource cannot be found.
+          schema:
+            $ref: "#/definitions/Error"
+  /ping:
+    get:
+      summary: Pings the server to check the liveness state of the server.
+      description: "If the server is alive and the user is authenticated will return the  user info of the currently authenticated user.For non authenticated user, 403 is returned."
+      tags:
+        - Authentication
+      operationId: ping
+      responses:
+        '200':
+          description: Logged in user details.
+          schema:
+            $ref: "#/definitions/UserInfo"
+        '400':
+          description: Error if the request is invalid.
+          schema:
+            $ref: "#/definitions/Error"
+        '403':
+          description: Forbidden - The logged in User is not authenticated, or does not have access to the requested resource(s). See the error details for more information.
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: Error if the resource cannot be found.
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  UserInfo:
+    description: Info about the currently logged in user
+    type: object
+    properties:
+      name:
+        description: Name of the logged in user
+        type: string
+      gud:
+        description: Unique id of the logged in user
+        type: string
+  Error:
+    description: Error Response
+    type: object
+    required:
+      - errorMsg
+      - errorCode
+    properties:
+      errorMsg:
+        description: Verbose error message
+        type: string
+      errorCode:
+        description: Internal error code
+        type: string
+      stackTrace:
+        description: Added if available
+        type: string
+      contextAttributes:
+        description: List of attributes
+        type: array
+        items:
+          $ref: "#/definitions/ContextAttribute"
+  ContextAttribute:
+    description: Name and value pair of context information for error.
+    type: object
+    required:
+      - name
+      - value
+    properties:
+      name:
+        description: Name of context attribute.
+        type: string
+      value:
+        description: Value of context attribute.
+        type: string

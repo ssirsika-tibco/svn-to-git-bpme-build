@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint default-activation="eager"
+	xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs" xmlns:cxf="http://cxf.apache.org/blueprint/core"
+	xsi:schemaLocation="
+             http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+             http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+             http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+             ">
+
+	<reference id="adminConfigServiceRef" interface="com.tibco.bpm.ace.admin.api.AdminConfigurationService" >
+		<reference-listener bind-method="setReference" ref="openIdContextHelper"/>
+	</reference>	
+	<reference id="ssoAuthenticationListener" interface="com.tibco.bpm.auth.api.BPMAuthenticationListener">
+		<reference-listener bind-method="setReference" ref="openIdContextHelper"/>
+	</reference>
+	<reference id="bpmSecurityService" interface="com.tibco.bpm.auth.api.SSOSecuritySupport">
+		<reference-listener bind-method="setVerifier" ref="openIdContextHelper"/>
+	</reference>
+
+	<bean id="openIdContextHelper" class="com.tibco.bpm.auth.openid.OpenIdContextHelper" scope="singleton">
+	</bean>
+	<!-- 
+	<bean id="springBridge" class="com.tibco.bpm.blueprint.spring.bridge.SpringBridge"
+		init-method="init" destroy-method="destroy" depends-on="openIdContextHelper">
+		<property name="bundleInfo" ref="bundleInfo" />
+		<property name="springContexts">
+			<list>
+				<value>classpath:resources/spring.xml
+				</value>
+			</list>
+		</property>
+	</bean>
+  -->
+	<bean id="bundleInfoFactory" class="com.tibco.bpm.blueprint.spring.bridge.BundleInfoFactory">
+		<property name="blueprintBundle" ref="blueprintBundle" />
+	</bean>
+
+	<bean id="bundleInfo" factory-ref="bundleInfoFactory"
+		factory-method="createBundleInfo" />
+
+
+	<bean id="openIdLogoutHandler" class="com.tibco.bpm.auth.openid.handler.BPMOpenIDLogoutHandler">
+	</bean>
+	
+	<service ref="openIdLogoutHandler" interface="com.tibco.bpm.auth.api.BPMLogoutHandler"></service>
+
+	<bean id="openIdPropertyChangeServiceImpl" class="com.tibco.bpm.auth.openid.OpenIdPropertyChangeListener">
+	</bean>
+	
+	<service ref="openIdPropertyChangeServiceImpl"
+		interface="com.tibco.bpm.ace.admin.api.PropertyChangeService">
+		<service-properties>
+			<entry key="groupIds">
+				<array value-type="java.lang.String">
+					<value>auth</value>
+				</array>
+			</entry>
+		</service-properties>
+	</service>	
+	
+	<bean id="httpClientSSOBindingBean" class="com.tibco.bpm.auth.openid.SSOServiceImpl">
+	</bean>
+	
+	<service id="httpClientSSOBinding" ref="httpClientSSOBindingBean"
+		interface="com.tibco.bpm.auth.api.HttpClientSSOBinding">
+	</service>
+	<!-- 
+	<jaxrs:server address="/auth/openid/v1" id="bpm">
+		<jaxrs:serviceBeans>
+			<ref component-id="testSSOService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:extensionMappings>
+			<entry key="json" value="application/json" />
+		</jaxrs:extensionMappings>
+		<jaxrs:providers>
+			<bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server> -->
+
+</blueprint>

@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="wbpm.tools" default="build">
+	<dirname property="wbpm.tools.dir" file="${ant.file.wbpm.tools}"/>
+	<dirname property="bpmsandbox.dir.base" file="${ant.file.wbpm.tools}"/>
+
+	<import file="${user.home}/tibco-build/user-overrides.xml" optional="false" />
+	 <property name="env.BUILDER_HOME" value="${devtools.dir.base}"/>
+	 <property name="env.SE_SRC" value="${bpmsandbox.dir.base}/ScriptEngine"/>
+	 <property name="mvn_goals" value="validate -Pvbuild"/>
+	 
+	 
+	 <target name="wait-build">
+		<echo message="=================================================================="/>
+		<echo message="**** ******** WAITING FOR THE NEXT BUILD FOR FEW SECONDS ... ****************"/>
+		<echo message="=================================================================="/>
+		<sleep seconds="2"/>
+	 </target>
+	 
+	 <!-- Ant specific targets -->
+	<target name="auth-kar">
+		<antcall target="do-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/Authentication"/>
+		</antcall>
+	</target>
+	
+	
+	<target name="wrp-kar">
+		<antcall target="do-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/WebResourceProvisioner"/>
+		</antcall>
+	</target>
+	
+	
+	<target name="cc-kar">
+		<antcall target="do-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/ClientServices"/>
+		</antcall>
+	</target>
+
+	
+	<target name="wp-kar">
+		<antcall target="do-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/WorkPresentation"/>
+		</antcall>
+	</target>
+
+	
+	<target name="se-kar">
+		<antcall target="do-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/ScriptEngine"/>
+		</antcall>
+	</target>
+
+	
+	<target name="cdm-kar">
+		<antcall target="do-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/CaseDataManager"/>
+			<param name="SE_SRC" value="${bpmsandbox.dir.base}/ScriptEngine"/>
+			<param name="BUILDER_HOME" value="${devtools.dir.base}"/>
+		</antcall>
+		
+	</target>
+
+	
+	<target name="pfe-kar">
+		<antcall target="do-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/PageflowEngine"/>
+		</antcall>
+	</target>
+
+	
+	<!--auth.kar,wrp.kar,cc.kar,wp.kar,se.kar,cdm.kar,pfe.kar-->
+	<target name="bpme-kars" depends="auth-kar,wait-build,se-kar,wait-build,wrp-kar,wait-build,cc-kar,wait-build,wp-kar,wait-build,cdm-kar,wait-build,pfe-kar" description="Ant: Build all bpme kar files">
+	</target>
+	
+	<!-- Maven specific targets -->
+	<target name="maven-auth-kar">
+		<antcall target="do-maven-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/Authentication" />
+		</antcall>
+	</target>
+
+	<target name="maven-wrp-kar">
+		<antcall target="do-maven-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/WebResourceProvisioner" />
+		</antcall>
+	</target>
+
+	<target name="maven-cc-kar">
+		<antcall target="do-maven-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/ClientServices" />
+		</antcall>
+	</target>
+
+	<target name="maven-wp-kar">
+		<antcall target="do-maven-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/WorkPresentation" />
+		</antcall>
+	</target>
+
+	<target name="maven-se-kar">
+		<antcall target="do-maven-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/ScriptEngine" />
+		</antcall>
+	</target>
+
+	<target name="maven-cdm-kar">
+		<antcall target="do-maven-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/CaseDataManager" />
+			<param name="SE_SRC" value="${bpmsandbox.dir.base}/ScriptEngine" />
+			<param name="BUILDER_HOME" value="${devtools.dir.base}" />
+		</antcall>
+	</target>
+
+	<target name="maven-pfe-kar">
+		<antcall target="do-maven-kar-build" inheritAll="true">
+			<param name="compHomeDir" value="${bpmsandbox.dir.base}/PageflowEngine" />
+		</antcall>
+	</target>
+
+	<target name="maven-build-super-pom">
+		<invoke.feature.maven.target.msg message="Building the feature using Maven" target="clean install package -Ptibco"/>
+	</target>
+
+	<target name="maven-bpme-kars" 
+			depends="maven-build-super-pom,maven-auth-kar,wait-build,maven-se-kar,wait-build,maven-wrp-kar,wait-build,maven-cc-kar,wait-build,maven-wp-kar,wait-build,maven-cdm-kar,wait-build,maven-pfe-kar" 
+			description="Maven: Build all Maven-based BPME KAR files">
+	</target>
+
+	<!-- The following flag will disable the dual build flags for the -->
+	<!-- features that are build for both runtime and designtime this -->
+	<!-- is useful if the runtime and designtime eclipse vesions      -->
+	<!-- differ and hence can't build against the same base.            -->
+	<!-- Disable the Dual Build Feature due to different versions of Eclipse -->
+	<!-- <property name="dual.build.autorun.bypass" value="true" /> -->
+
+	<!-- Setup a base sandbox path that imported scripts can use -->
+	<property name="wbpm.tools.target.sandbox" location="${wbpm.tools.dir}"/>
+	<property name="wbpmcomposite.dir" location="${wbpm.tools.dir}/wbpmComposite"/>
+	<property name="installer.dir" location="${bpmsandbox.dir.base}/Common/installer"/>
+	<property name="baseline.dir" location="${installer.dir}/baseline"/>
+
+	<property name="features.info.xml" location="${bpmsandbox.dir.base}/Common/features-info.xml"/>
+
+	<property name="publish.script.location" location="${bpmtools.dir.base}/publish"/>
+	<property name="svntools.script.location" location="${bpmtools.dir.base}/common"/>
+	<property name="incrbuild.script.location" location="${bpmtools.dir.base}/incrbuild"/>
+	<property name="incrbuild.properties.location" location="${bpmsandbox.dir.base}/Common/build" />
+    <property name="features.file" value="WBPMFeatures.list"/>
+
+	<import file="${publish.script.location}/publish.xml" optional="true" />
+	<import file="${svntools.script.location}/svn-tools.xml"/>
+	<import file="${incrbuild.script.location}/incrBuild.xml"/>
+	
+	<property name="bpmtools.version.min" value="1.0.33"/>
+	<bpm.compare.dot.versions testver="${bpmtools.version}" targetver="${bpmtools.version.min}" setIfOlder="tools.is.older"/>
+	<fail message="BPM Tools version needs to be at least ${bpmtools.version.min} but it currently ${bpmtools.version}.   Please update." if="tools.is.older"/>
+
+	<!-- Common file locations used by this script -->
+	<property name="last-published-rus.properties" location="${bpmsandbox.dir.base}/Common/last-published-rus.properties"/>
+	<property name="core-rus-baseline.xml" location="${baseline.dir}/wbpm-baseline.xml"/>
+	<property name="do-release-log" location="${wbpm.tools.dir}/do-release.log"/>
+
+
+
+
+	<!--
+		TARGET:	-load-props-from-env
+		
+			This target loads a none set of properties from the environment:
+
+	-->
+	<target name="-load-props-from-env" unless="-loaded-props-from-env">
+		<!-- Load the properties from the environemt that we expect to exist -->
+		<property environment="env" />
+		<property name="autobuild.user.name" value="${env.autobuild.user.name}"/>
+		<property name="autobuild.user.password" value="${env.autobuild.user.password}"/>
+		<property name="autobuild.release.major" value="${env.autobuild.release.major}"/>
+		<property name="autobuild.release.minor" value="${env.autobuild.release.minor}"/>
+		<property name="autobuild.release.micro" value="${env.autobuild.release.micro}"/>
+		<property name="autobuild.release.vbuild" value="${env.autobuild.release.vbuild}"/>
+		<property name="autobuild.jira.commit.issue.num" value="${env.autobuild.jira.commit.issue.num}"/>
+		<property name="autobuild.release.build.installers" value="${env.autobuild.release.build.installers}"/>
+		<property name="autobuild.release.artifacts.root" value="${autobuild.release.artifacts.root}"/>
+		<property name="-loaded-props-from-env" value="true"/>
+	</target>
+
+
+
+
+
+	<!--
+		TARGET:	-do-publish-prechecks
+		
+			This target makes sure that all required information to do a release has been passed and
+			that the information is correct.   It check.
+			
+				1.  That you've passed a username/password.
+
+	-->
+	<target name="-do-publish-prechecks" depends="-load-props-from-env,-setup-svn-exe" unless="autobuild.skip.release.checks" >
+		<!-- Check we have both username and password -->
+		<fail message="ERROR: You have not set the properties autobuild.user.name or autobuild.user.password. This is required for SVN and EC access.">
+			<condition>
+				<not>
+					<and>
+						<isset property="autobuild.user.name"/>
+						<isset property="autobuild.user.password"/>
+					</and>
+				</not>
+			</condition>
+		</fail>
+	</target>
+
+
+
+
+
+	<!--
+		TARGET:	do-publish
+		
+			This target just publishes and commits the publish results.   It does no baseline or installer work.
+			
+				1.  Runs the publishing script in silent mode.
+				2.  Commits publish run to the repo.
+
+	-->
+	<target name="do-publish" depends="-do-publish-prechecks">
+		<!-- Run the publish, making sure we pass the silent flag -->
+		<trycatch property="autobuild.publish.error.message" reference="autobuild.publish.error.id">
+			<try>
+				<!-- Do the publis run -->
+				<antcall target="publish" inheritAll="true">
+					<param name="autobuild.quiet" value="true"/>
+				</antcall>
+
+				<!-- Now update the baseline -->
+				<ant dir="${installer.dir}" target="baseline"/>
+			</try>
+
+			<catch>
+				<echo message="Publishing failed with message ${autobuild.publish.error.message}, committing the results anyway"/>
+				<property name="publish.failed" value="true"/>
+			</catch>
+
+			<finally>
+				<!-- Commit the publish properties file for as far as we've got -->
+				<svn.commit.as.user
+						location="${wbpm.tools.dir}"
+						username="${autobuild.user.name}"
+						password="${autobuild.user.password}"
+						jira.commit.comment="Committing results of publish run."
+						report.file="${do-release-log}"/>
+			</finally>
+		</trycatch>
+
+		<fail message="${autobuild.publish.error.message}" if="publish.failed"/>
+
+	</target>
+	
+	<!-- Package the DB scripts-->
+	<target name="package-db">
+		<ant antfile="package-db-scripts.xml" target="package" dir="${bpmsandbox.dir.base}/WebResourceProvisioner" inheritAll="true"/>
+		<ant antfile="package-db-scripts.xml" target="package" dir="${bpmsandbox.dir.base}/PageflowEngine" inheritAll="true"/>
+		<ant antfile="package-db-scripts.xml" target="package" dir="${bpmsandbox.dir.base}/WorkPresentation" inheritAll="true"/>
+		<ant antfile="package-db-scripts.xml" target="package" dir="${bpmsandbox.dir.base}/ClientServices" inheritAll="true"/>
+		<ant antfile="package-db-scripts.xml" target="package" dir="${bpmsandbox.dir.base}/CaseDataManager" inheritAll="true"/>
+	</target>
+	
+	<!-- copy the release notes -->
+	<target name="copy-rel-notes" depends="package-db">
+	
+		<!-- Create release info directories-->
+		<mkdir dir="${bpmsandbox.dir.base}/release/db" />
+		<mkdir dir="${bpmsandbox.dir.base}/release/kars" />
+		
+		<!-- copy the release info files-->
+		<!--  Commeenting the copy of release-info build code as it was just coping old generated release-info rather than creating new.
+		<copy file="${bpmsandbox.dir.base}/Authentication/vbuild/release-info.xml"  overwrite="true" tofile="${bpmsandbox.dir.base}/Authentication/vbuild/releaseDocument-auth.xml"/>
+		<copy file="${bpmsandbox.dir.base}/Authentication/vbuild/releaseDocument-auth.xml"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/releaseDocument-auth.xml"/>
+		<copy file="${bpmsandbox.dir.base}/CaseDataManager/build-artifacts/vbuild/release-info.xml"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/releaseDocument-cdm.xml"/>
+		<copy file="${bpmsandbox.dir.base}/ClientServices/build-artifacts/vbuild/release-info.xml"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/releaseDocument-cc.xml"/>
+		<copy file="${bpmsandbox.dir.base}/PageflowEngine/build-artifacts/vbuild/release-info.xml"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/releaseDocument-pfe.xml"/>
+		<copy file="${bpmsandbox.dir.base}/ScriptEngine/vbuild/release-info.xml"  overwrite="true" tofile="${bpmsandbox.dir.base}/ScriptEngine/vbuild/releaseDocument-se.xml"/>
+		<copy file="${bpmsandbox.dir.base}/ScriptEngine/vbuild/releaseDocument-se.xml"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/releaseDocument-se.xml"/>
+		<copy file="${bpmsandbox.dir.base}/WebResourceProvisioner/build-artifacts/vbuild/release-info.xml"  overwrite="true" tofile="${bpmsandbox.dir.base}/WebResourceProvisioner/build-artifacts/releaseDocument-wrp.xml"/>
+		<copy file="${bpmsandbox.dir.base}/WebResourceProvisioner/build-artifacts/releaseDocument-wrp.xml"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/releaseDocument-wrp.xml"/>
+		<copy file="${bpmsandbox.dir.base}/WorkPresentation/build-artifacts/vbuild/release-info.xml"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/releaseDocument-wp.xml"/> -->
+		
+		<!-- copy the kars-->
+		<copy file="${bpmsandbox.dir.base}/Authentication/build-artifacts/com.tibco.bpm.auth.kar"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/kars/com.tibco.bpm.auth.kar"/>
+		<copy file="${bpmsandbox.dir.base}/CaseDataManager/build-artifacts/com.tibco.bpm.cdm.kar"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/kars/com.tibco.bpm.cdm.kar"/>
+		<copy file="${bpmsandbox.dir.base}/ClientServices/build-artifacts/com.tibco.bpm.cc.kar"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/kars/com.tibco.bpm.cc.kar"/>
+		<copy file="${bpmsandbox.dir.base}/PageflowEngine/build-artifacts/com.tibco.bpm.pfe.kar"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/kars/com.tibco.bpm.pfe.kar"/>
+		<copy file="${bpmsandbox.dir.base}/ScriptEngine/kar/com.tibco.bpm.se-api.kar"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/kars/com.tibco.bpm.se-api.kar"/>
+		<copy file="${bpmsandbox.dir.base}/WebResourceProvisioner/build-artifacts/com.tibco.bpm.wrp.kar"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/kars/com.tibco.bpm.wrp.kar"/>
+		<copy file="${bpmsandbox.dir.base}/WorkPresentation/build-artifacts/com.tibco.bpm.wp.kar"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/kars/com.tibco.bpm.wp.kar"/>
+		
+		
+		<!-- copy the db zips-->
+		<copy file="${bpmsandbox.dir.base}/WorkPresentation/wp-dbscripts.zip"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/db/wp-dbscripts.zip"/>
+		<copy file="${bpmsandbox.dir.base}/WebResourceProvisioner/wrp-dbscripts.zip"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/db/wrp-dbscripts.zip"/>
+		<copy file="${bpmsandbox.dir.base}/PageflowEngine/pfe-dbscripts.zip"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/db/pfe-dbscripts.zip"/>
+		<copy file="${bpmsandbox.dir.base}/ClientServices/build-artifacts/cc-dbscripts.zip"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/db/cc-dbscripts.zip"/>
+		<copy file="${bpmsandbox.dir.base}/CaseDataManager/cdm-dbscripts.zip"  overwrite="true" tofile="${bpmsandbox.dir.base}/release/db/cdm-dbscripts.zip"/>
+	</target>
+	
+	<!-- Generate the release info using maven profiles -->
+	<condition property="isWindows">
+        <os family="windows" />
+	</condition>
+
+	 <condition property="isLinux">
+		<os family="unix" />
+	 </condition>
+
+	<target name="mvn_windows_setup" if="isWindows">
+		<property name="mvn.executable" value="cmd" />
+		<property name="mvn.args" value="/c" />
+	</target>
+
+	<target name="mvn_unix_setup" if="isLinux">
+		<property name="mvn.executable" value="sh" />
+		<property name="mvn.args" value="-c" />
+	</target>
+
+	<target name="generate-rel-notes" depends="mvn_windows_setup, mvn_unix_setup">
+		<exec dir="${bpmsandbox.dir.base}" executable="${mvn.executable}">
+			<arg line="${mvn.args} 'mvn ${mvn_goals}'" />
+		</exec>
+	</target>
+	
+	
+	<!-- release build job-->
+	<target name="bpme-release-bld" depends="package-db,generate-rel-notes,copy-rel-notes">
+	</target>
+	
+	
+	 <!-- Define the macrodef for common build logic -->
+    <macrodef name="common-kar-build">
+        <attribute name="buildTarget" />
+        <attribute name="buildMessage" />
+        <sequential>
+            <if>
+                <istrue value="${autobuild.bpm.fork.build}"/>
+                <then>
+                    <echo>
+    =======================================================================================
+    
+    @{buildMessage}
+    
+    =======================================================================================
+                    </echo>
+                    <java classname="org.apache.tools.ant.Main" fork="true" dir="${compHomeDir}" failonerror="true">
+                        <arg value="-buildfile"/>
+                        <arg file="${compHomeDir}/build.xml"/>
+                        <arg value="@{buildTarget}" />
+                        <syspropertyset refid="build-prop-set" />
+                        <classpath path="${java.class.path}"/>
+                    </java>
+                </then>
+                <else>
+                    <ant dir="${compHomeDir}" target="@{buildTarget}" output="releaseBuild.log" inheritall="false" />
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <!-- Define the main targets -->
+    <target name="do-kar-build">
+        <echo message="=================================================================="/>
+        <echo message="compHomeDir is ${compHomeDir}==========================================="/>
+        <echo message="=================================================================="/>
+        		<!-- 
+			Make sure we default the "fork" value to true to default to the new behaviour
+		-->
+		<!-- <property name="autobuild.bpm.fork.build" value="true"/> -->
+
+        <!-- Call the macrodef with specific parameters -->
+        <common-kar-build buildTarget="kar"
+                          buildMessage="Using ant exec to fork JVM for feature build" />
+    </target>
+
+    <target name="do-maven-kar-build">
+        <echo message="=================================================================="/>
+        <echo message="compHomeDir is ${compHomeDir}==========================================="/>
+        <echo message="=================================================================="/>
+        
+        <!-- Call the macrodef with specific parameters -->
+        <common-kar-build buildTarget="maven-kar"
+                          buildMessage="Using ant exec to fork JVM for maven feature build" />
+    </target>
+
+	<macrodef name="invoke.feature.maven.target.msg">
+		<attribute name="message"/>
+		<attribute name="target"/>
+		<sequential>
+			<echo>
+=======================================================================================
+
+@{message}
+
+=======================================================================================
+			</echo>
+
+			<exec executable="mvn" failonerror="true" vmlauncher="false">
+				<arg line="@{target}"/>
+			</exec>
+		</sequential>
+	</macrodef>
+
+</project>

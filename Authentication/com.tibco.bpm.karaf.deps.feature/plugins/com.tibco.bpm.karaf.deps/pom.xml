@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @Generated on 2024-12-16 12:34:46 with /Common/build/utilities/convert-to-maven-build/buildutil.xml -->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.tibco.bpm.auth</groupId>
+    <artifactId>com.tibco.bpm.karaf.deps.feature.ru</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../../</relativePath>
+  </parent>
+  <groupId>com.tibco.bpm.auth</groupId>
+  <artifactId>com.tibco.bpm.karaf.deps</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>eclipse-plugin</packaging>
+</project>

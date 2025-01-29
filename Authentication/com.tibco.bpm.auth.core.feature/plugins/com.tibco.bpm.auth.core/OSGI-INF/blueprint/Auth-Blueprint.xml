@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint default-activation="eager"
+	xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs" xmlns:cxf="http://cxf.apache.org/blueprint/core"
+	xsi:schemaLocation="
+             http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+             http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+             http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+             ">
+
+	<!-- REFERENCES  START -->
+	<reference id="blueDataSource" interface="javax.sql.DataSource" />
+	<reference id="securityService" interface="com.tibco.n2.de.api.services.SecurityService"
+		availability="optional" timeout="1">
+	</reference>
+	<reference id="webContainer" interface="org.ops4j.pax.web.service.WebContainer"/>
+	<reference id="logProbe" interface="com.tibco.bpm.logging.cloud.common.probe.log.LogProbeProvider" />
+	<reference id="openIdLogoutHandler" interface="com.tibco.bpm.auth.api.BPMLogoutHandler"
+		availability="optional" timeout="5000">
+		<reference-listener bind-method="addLogoutHandler" ref="bpmCompositeLogoutHandler"/>
+	</reference>
+	<reference id="httpClientSSOBinding" interface="com.tibco.bpm.auth.api.HttpClientSSOBinding" 
+		availability="optional" timeout="500" />
+	<!-- REFERENCES  END -->
+	
+	<bean id="springBridge" class="com.tibco.bpm.blueprint.spring.bridge.SpringBridge"
+		init-method="init" destroy-method="destroy">
+		<property name="bundleInfo" ref="bundleInfo" />
+		<property name="springContexts">
+			<list>
+				<value>classpath:resources/auth-beans-ace.xml
+				</value>
+			</list>
+		</property>
+		<property name="blueprintToSpringMappings">
+			<map>
+				<entry key="dataSource" value-ref="blueDataSource" />
+				<entry key="securityService" value-ref="securityService" />
+				<entry key="httpClientSSOBinding" value-ref="httpClientSSOBinding" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="bundleInfoFactory" class="com.tibco.bpm.blueprint.spring.bridge.BundleInfoFactory">
+		<property name="blueprintBundle" ref="blueprintBundle" />
+	</bean>
+
+	<bean id="bundleInfo" factory-ref="bundleInfoFactory"
+		factory-method="createBundleInfo" />
+
+	<!-- Define beans for Auth handler,DE,Security Service -->
+
+	<bean id="basicAuthHandler" class="com.tibco.bpm.auth.ldap.BasicAuthenticationHandler">
+		<property name="deDelegate" ref="deDelegate" />
+	</bean>
+	
+	<!-- For SSO  -->
+	<bean id="ssoAuthHandler" class="com.tibco.bpm.auth.handler.SSOAuthenticationHandler">
+		<property name="deDelegate" ref="deDelegate" />
+	</bean>
+	
+	
+	<bean id="deDelegate" class="com.tibco.bpm.auth.DEDelegate">
+		<property name="securityService" ref="securityService" />
+	</bean>
+	
+	
+	<bean id="bpmsecurityService" factory-ref="springBridge"
+		factory-method="lookupSpringBean">
+		<argument value="bpmsecurityService" />
+	</bean>
+	
+	<bean id="ssoAuthenticationListener" class="com.tibco.bpm.auth.listener.SSOAuthenticationListener">
+		<argument ref="bpmsecurityService" />
+	</bean>
+	
+	<service ref="ssoAuthenticationListener" interface="com.tibco.bpm.auth.api.BPMAuthenticationListener"></service>
+	<!-- Inject the references -->
+
+
+	<service ref="bpmsecurityService">
+	 	<interfaces>
+        	<value>com.tibco.bpm.auth.api.BPMSecurityService</value>
+        	<value>com.tibco.bpm.auth.api.SSOSecuritySupport</value>
+    	</interfaces>
+	</service>
+
+	<!-- REST service bean for Authentication -->
+	<bean id="authService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="authServiceTx" />
+		<!--<argument value="authServiceImpl" />-->
+		
+	</bean>
+
+	<!-- REST service bean for Logout -->
+	<bean id="logoutService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="logoutServiceImpl" />		
+	</bean>
+	
+	<!-- REST service bean for Ping -->
+	<bean id="pingService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="pingServiceImpl" />		
+	</bean>
+	
+	<!-- REST service bean for Session Infor -->
+	<bean id="sessionInfoService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="sessionInfoServiceImpl" />		
+	</bean>
+
+	<!-- REST service bean for SSO login -->
+	<bean id="ssoService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="ssoServiceImpl" />		
+	</bean>
+
+	<!-- BPMCompositeLogoutHandler bean -->
+	<bean id="bpmCompositeLogoutHandler" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="bpmCompositeLogoutHandler" />		
+	</bean>
+
+	<!-- <bean id="testSSOService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="testSSOServiceImpl" />		
+	</bean> -->
+	
+	
+	<!-- The configuration service will call this whenever a property in the 'auth' group is changed -->
+	<bean id="authPropertyChangeService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="propertyChangeServiceImpl" />
+	</bean>	
+	<service ref="authPropertyChangeService"
+		interface="com.tibco.bpm.ace.admin.api.PropertyChangeService">
+		<service-properties>
+			<entry key="groupIds">
+				<array value-type="java.lang.String">
+					<value>auth</value>
+				</array>
+			</entry>
+		</service-properties>
+	</service>	
+
+	<!--Configure CXF Server -->
+	<jaxrs:server address="/auth/v1" id="bpm">
+		<jaxrs:serviceBeans>
+			<ref component-id="authService" />
+			<ref component-id="logoutService" />
+			<ref component-id="ssoService" />
+			<ref component-id="pingService" />   
+			<ref component-id="sessionInfoService" />
+			<!-- <ref component-id="testSSOService" /> -->
+		</jaxrs:serviceBeans>
+		<jaxrs:extensionMappings>
+			<entry key="json" value="application/json" />
+		</jaxrs:extensionMappings>
+		<jaxrs:providers>
+			<bean id="filterProvider" class="com.tibco.bpm.auth.api.BPMContainerFilter">
+				<property name="securityService" ref="bpmsecurityService"></property>
+			</bean>
+			<bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
+			<bean id="exceptionMapper"
+				class="com.tibco.bpm.auth.core.exception.RESTExceptionMapper" />
+		</jaxrs:providers>
+	</jaxrs:server>
+
+</blueprint>

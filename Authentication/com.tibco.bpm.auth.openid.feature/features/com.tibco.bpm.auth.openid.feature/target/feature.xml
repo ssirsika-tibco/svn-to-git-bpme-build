@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature id="com.tibco.bpm.auth.openid.feature" label="%featureName" version="1.0.0.202501230452" provider-name="%providerName">
+	<description>%description</description>
+	<copyright>%copyright</copyright>
+	<license url="%licenseURL">%license</license>
+    <requires>
+		<import feature="com.tibco.bpm.blueprint.spring.bridge.feature" version="1.2.0" match="compatible"/>
+		<import feature="com.tibco.tpcl.bpm.org.springframework.feature" version="5.3.27" match="compatible" />
+        <import feature="com.tibco.n2.logging.feature" version="1.17.0" match="compatible"/>
+		<import feature="com.tibco.bpm.logging.probe.event.container.feature" version="1.1.0" match="compatible"/>
+		<import feature="com.tibco.bpm.logging.cloud.log4j2.feature" version="1.1.0" match="compatible"/>
+		<import feature="com.tibco.bpm.logging.cloud.common.feature" version="1.5.0" match="compatible"/>
+		<import feature="com.tibco.n2.de.api.feature" version="1.15.0" match="compatible"/>
+		<import feature="com.tibco.n2.common.feature" version="1.16.0" match="compatible"/>
+		<import feature="com.tibco.bpm.karaf.deps.feature" version="1.0.0" match="compatible"/>
+		<import feature="com.tibco.bpm.auth.api.feature" version="1.1.0" match="compatible"/>
+		<import feature="com.tibco.bpm.auth.core.feature" version="1.0.0" match="compatible"/>
+		<import feature="com.tibco.tpcl.bpm.org.spring.security.feature" version="5.7.12" match="compatible"/>
+		<import feature="com.tibco.bpm.admin.api.feature" version="1.4.0" match="compatible"/>
+		
+		<!--
+			<import feature="com.tibco.tpcl.org.apache.commons.httpclient.feature" version="3.0.1" match="compatible"/>
+			<import feature="com.tibco.tpcl.org.apache.velocity.feature" version="1.7.0" match="compatible"/>
+			<import feature="com.tibco.tpcl.org.opensaml.feature" version="2.5.0" match="compatible"/>
+			<import feature="com.tibco.tpcl.org.owasp.esapi.feature" version="2.1.0" match="compatible"/>
+			<import feature="com.tibco.tpcl.org.bc.asn1.feature" version="2.41.3" match="compatible"/>
+		-->
+		
+		<!--Remove following 2 entries after https://jira.tibco.com/browse/ACE-2291 is fixed -->
+		<import feature="com.tibco.tpcl.org.apache.commons.beanutils.feature" version="1.7.100" match="equivalent"/>
+		<import feature="com.tibco.tpcl.org.apache.commons.lang.feature" version="2.4.100" match="equivalent"/>
+		<import feature="com.tibco.tpcl.javax.transaction.feature" version="1.3.0" match="compatible"/>		
+		
+    </requires>
+    <plugin id="com.tibco.bpm.auth.openid" download-size="5957" install-size="6789" version="1.0.0.202501230452" unpack="true"/>
+</feature>

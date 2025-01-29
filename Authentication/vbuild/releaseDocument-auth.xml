@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microservices>
+    <microservice name="Authentication Micro Service" description="Authentication MicroService implementation">
+        <component name="Authentication Micro Service" url="https://emea-swi-svn.emea.tibco.com/svn/WBPM/ace/trunk/Authentication" startRevision="26520" endRevision="26629"/>
+    </microservice>
+</microservices>

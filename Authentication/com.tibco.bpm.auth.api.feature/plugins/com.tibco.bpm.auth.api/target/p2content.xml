@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='com.tibco.bpm.auth.api' version='1.1.0.202501230452' singleton='false'>
+    <update id='com.tibco.bpm.auth.api' range='[0.0.0,1.1.0.202501230452)' severity='0'/>
+    <properties size='6'>
+      <property name='org.eclipse.equinox.p2.name' value='Authentication Api'/>
+      <property name='org.eclipse.equinox.p2.provider' value='TIBCO'/>
+      <property name='maven-groupId' value='com.tibco.bpm.auth'/>
+      <property name='maven-artifactId' value='com.tibco.bpm.auth.api'/>
+      <property name='maven-version' value='1.1.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+    <provides size='7'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='com.tibco.bpm.auth.api' version='1.1.0.202501230452'/>
+      <provided namespace='osgi.bundle' name='com.tibco.bpm.auth.api' version='1.1.0.202501230452'/>
+      <provided namespace='java.package' name='com.tibco.bpm.auth.api' version='1.1.0'/>
+      <provided namespace='java.package' name='com.tibco.bpm.auth.exception' version='1.1.0'/>
+      <provided namespace='java.package' name='com.tibco.bpm.auth.rest.v1.model' version='1.1.0'/>
+      <provided namespace='osgi.identity' name='com.tibco.bpm.auth.api' version='1.1.0.202501230452'>
+        <properties size='1'>
+          <property name='type' value='osgi.bundle'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='26'>
+      <required namespace='java.package' name='com.fasterxml.jackson.annotation' range='2.8.7'/>
+      <required namespace='java.package' name='com.tibco.bpm.ace.admin.api' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='com.tibco.bpm.ace.admin.model' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='com.tibco.bpm.logging.cloud.annotations.message' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.bpm.logging.cloud.annotations.metadata' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.bpm.logging.cloud.api' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.bpm.logging.cloud.context' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.n2.logging.annotations.metadata' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.n2.logging.annotations.metadata.definition' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.n2.logging.context.interfaces' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.n2.logging.context.message' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.n2.logging.context.metadata' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.n2.logging.context.parser' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.n2.logging.enums' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.n2.logging.metadata' range='1.14.0'/>
+      <required namespace='java.package' name='com.tibco.n2.logging.registration' range='1.14.0'/>
+      <required namespace='java.package' name='javax.security.auth' range='0.0.0'/>
+      <required namespace='java.package' name='javax.security.auth.callback' range='0.0.0'/>
+      <required namespace='java.package' name='javax.security.auth.login' range='0.0.0'/>
+      <required namespace='java.package' name='javax.servlet' range='[3.0.0,4.0.0)'/>
+      <required namespace='java.package' name='javax.servlet.http' range='[3.0.0,4.0.0)'/>
+      <required namespace='java.package' name='javax.ws.rs' range='[2.0.0,3.0.0)'/>
+      <required namespace='java.package' name='javax.ws.rs.container' range='[2.0.0,3.0.0)'/>
+      <required namespace='java.package' name='javax.ws.rs.core' range='[2.0.0,3.0.0)'/>
+      <required namespace='java.package' name='org.apache.commons.text' range='1.4.0'/>
+      <required namespace='java.package' name='org.apache.http.impl.client' range='[4.0.0,5.0.0)'/>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='com.tibco.bpm.auth.api' version='1.1.0.202501230452'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: com.tibco.bpm.auth.api&#xA;Bundle-Version: 1.1.0.202501230452&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

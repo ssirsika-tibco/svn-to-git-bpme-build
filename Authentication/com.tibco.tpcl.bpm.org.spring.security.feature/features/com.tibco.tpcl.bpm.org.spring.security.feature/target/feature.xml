@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature id="com.tibco.tpcl.bpm.org.spring.security.feature" label="%featureName" version="5.7.12.202501230452" provider-name="%providerName">
+	<description>%description</description>
+	<copyright>%copyright</copyright>
+	<license url="%licenseURL">%license</license>
+	<requires>
+		<import feature="com.tibco.tpcl.bpm.javax.ws.rs-api.feature" version="2.2.0" match="compatible"/>
+		<import feature="com.tibco.tpcl.bpm.org.apache.commons.beanutils.feature" version="1.9.4" match="equivalent"/>
+		<import feature="com.tibco.tpcl.bpm.org.apache.commons.lang.feature" version="2.6.0" match="equivalent"/>
+		<import feature="com.tibco.tpcl.bpm.org.springframework.feature" version="5.3.27" match="compatible" />
+	</requires>
+	<plugin id="com.tibco.tpcl.bpm.org.spring.security" download-size="5117" install-size="5760" version="5.7.12.202501230452" unpack="true"/>
+</feature>

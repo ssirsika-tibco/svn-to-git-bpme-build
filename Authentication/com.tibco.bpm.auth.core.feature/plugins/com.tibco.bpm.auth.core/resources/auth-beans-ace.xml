@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://cxf.apache.org/configuration/beans"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://cxf.apache.org/configuration/beans 
+		http://cxf.apache.org/schemas/configuration/cxf-beans.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://cxf.apache.org/jaxrs 
+		http://cxf.apache.org/schemas/jaxrs.xsd
+        http://cxf.apache.org/core 
+        http://cxf.apache.org/schemas/core.xsd">
+
+	<import resource="classpath:/com/tibco/bpm/logging/cloud/common/config/logging-cloud-log-config.xml" />
+	
+	<bean id="transactionManagerProxy" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!-- Authentication Service bean  -->
+	<bean id="authServiceImpl" class="com.tibco.bpm.auth.core.AuthenticationRestServiceImpl">
+	</bean>
+	
+	<!-- Authentication Service - exposed via REST -->			
+	<bean id="authServiceTx" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManagerProxy"/>
+		<property name="target" ref="authServiceImpl" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRES_NEW,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- Session Listener wrapped in transaction manager -->			
+	<bean id="bpmSessionListenerTx" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManagerProxy" />
+		<property name="target">
+			<bean class="com.tibco.bpm.auth.listener.BPMSessionListener" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="bpmsecurityService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManagerProxy" />
+		<property name="target">
+			<bean class="com.tibco.bpm.auth.core.BPMSecurityServiceImpl">
+				<property name="securityService" ref="securityService" />
+				<property name="bpmSessionListener" ref="bpmSessionListenerTx" />
+				<property name="httpClientSSOBinding" ref="httpClientSSOBinding" />
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+ 				<prop key="authenticate">PROPAGATION_REQUIRED,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+	<!-- <bean id="testSSOServiceImpl" class="com.tibco.bpm.auth.openid.test.TestSSOServiceImpl">
+		<property name="service" ref = "bpmsecurityService"/>
+	</bean> -->
+	
+	<!-- Logout Service bean  -->
+	<bean id="bpmCompositeLogoutHandler" class="com.tibco.bpm.auth.handler.BPMCompositeLogoutHandler">
+	</bean>
+	
+	<!-- Logout Service - exposed via REST -->	
+	<bean id="logoutServiceTx" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" depends-on="bpmCompositeLogoutHandler">
+		<property name="transactionManager" ref="transactionManagerProxy"/>
+		<property name="target" ref="bpmCompositeLogoutHandler" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRES_NEW,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+			
+	<bean id="logoutServiceImpl" class="com.tibco.bpm.auth.core.LogoutRestServiceImpl" depends-on="logoutServiceTx">
+		<property name="logoutHandler" ref="logoutServiceTx"/>
+	</bean>
+	
+	<bean id="pingServiceImpl" class="com.tibco.bpm.auth.core.PingServiceImpl">	
+	</bean>
+	
+	<bean id="sessionInfoServiceImpl" class="com.tibco.bpm.auth.core.SessionInfoServiceImpl">
+	</bean>
+
+	<bean id="ssoServiceImpl" class="com.tibco.bpm.auth.core.SSORestServiceImpl">
+	</bean>
+	
+	<!-- Impl for Admin's property change notification interface -->
+	<bean id="authConfigHandler" class="com.tibco.bpm.auth.admin.AuthPropertyConfig">
+	</bean>
+	<bean id="propertyChangeServiceImpl" class="com.tibco.bpm.auth.admin.AuthPropertyChangeListener">
+		<property name="configHandler" ref="authConfigHandler" />
+	</bean>
+				
+</beans>

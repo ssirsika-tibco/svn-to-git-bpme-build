@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint default-activation="eager"
+	xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs" xmlns:cxf="http://cxf.apache.org/blueprint/core"
+	xsi:schemaLocation="
+             http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+             http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+             http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+             ">
+
+	<bean id="basicAuthHandler" class="com.tibco.bpm.auth.ldap.BasicAuthenticationHandler">
+		<property name="deDelegate" ref="deDelegate" />
+	</bean>
+	<bean id="deDelegate" class="com.tibco.bpm.auth.DEDelegate">
+		<property name="securityService" ref="securityService" />
+	</bean>
+	<reference id="securityService" interface="com.tibco.n2.de.api.services.SecurityService">
+	</reference>
+	<reference id="webContainer" interface="org.ops4j.pax.web.service.WebContainer">
+	</reference>
+</blueprint>

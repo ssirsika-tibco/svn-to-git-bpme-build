@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @Generated on 2024-12-16 12:34:40 with /Common/build/utilities/convert-to-maven-build/buildutil.xml -->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.tibco.bpm.auth</groupId>
+    <artifactId>authentication-bld</artifactId>
+    <version>1.0.svn2git-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+  <groupId>com.tibco.bpm.auth</groupId>
+  <artifactId>com.tibco.bpm.auth.openid.feature.ru</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>features/com.tibco.bpm.auth.openid.feature</module>
+    <module>plugins/com.tibco.bpm.auth.openid</module>
+  </modules>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>2.7.5</version>
+        <extensions>true</extensions>
+      </plugin>
+
+      <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>Download artifacts</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+								<echo message=""/>
+								<echo message="*******************************************************"/>
+								<echo message="Listing all jar.md in the ${basedir} directory"/>
+								<property name="jfrog.user"
+								          value="svc_amxbpmjfr@cloud.com"/>
+								<property name="jfrog.password"
+								          value="eyJ2ZXIiOiIyIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYiLCJraWQiOiJrdU5ERlBuc2dSeE44a1J2UlNHU3Z1eEZza0RsWlBLRnA3ZGVBZkVvc1VJIn0.eyJzdWIiOiJqZmFjQDAxaGVndHA1YXMwam03MWdhdnR0OG4xYWNxL3VzZXJzL3N2Y19hbXhicG1qZnJAY2xvdWQuY29tIiwic2NwIjoiYXBwbGllZC1wZXJtaXNzaW9ucy91c2VyIiwiYXVkIjoiKkAqIiwiaXNzIjoiamZmZUAwMWhlZ3RwNWFzMGptNzFnYXZ0dDhuMWFjcSIsImlhdCI6MTcyNzQxODk2NSwianRpIjoiNTNhZGJiNGMtMTY4MS00ZDMxLWIwMjEtNjQwYWJiNmUzZWJlIn0.UW1EijyOBz8_ffqRIRgRb1kj057V-3AgSdlprjcW21rGzJDxDRewsNI1zDgk4G789pQLAbbYFIYG_44-EZQmq3YluVoMZknUG3nFIDXqLlpE7IAaQ32_W9B0KRfPCXKJl-WcqjUZwW_YD4BZk3WAQ_sh_VLehqdcq-_0wvgNH3NBSyAZgK1w8sORBLGsuYrYciU2qhoHw8DqcKKaFfz_MV2O0GoNyvSsRMHt3zcB5dlQ7U_wX4t1a-lw_HsWN3ZrANFLHzZgRNGCD2sPJL7DEOquObj6dyGcswRUkquyEqEe_zXLVpo2ESK91XTTR8DZPnS_9Vey23z8LVoCbEEwPQ"/>
+								<!--                                        <property file="jfrog.properties"/>-->
+								<for param="file">
+									<path>
+										<fileset dir="${basedir}"
+										         includes="**/*.md"/>
+									</path>
+									<sequential>
+										<echo message=""/>
+										<echo message="==================================================="/>
+										<echo message="jar.md file @{file}"/>
+										<dirname property="dir.name.@{file}"
+										         file="@{file}"/>
+										<echo message="dir name: ${dir.name.@{file}}"/>
+										<condition property="isTest.@{file}">
+											<contains string="${dir.name.@{file}}"
+											          substring="test"/>
+										</condition>
+										<echo message="isTest: ${isTest.@{file}}"/>
+										<if>
+											<equals arg1="${isTest.@{file}}"
+											        arg2="true"/>
+											<then>
+												<echo message="Skipping download of test file: @{file}"/>
+											</then>
+											<else>
+												<echo message="Reading content of file @{file}"/>
+												<propertyregex property="dest.file.name.@{file}"
+												               input="@{file}"
+												               regexp="(.*)\.md"
+												               select="\1"/>
+												<echo message="Destination jar file name: ${dest.file.name.@{file}}"/>
+												<loadfile property="fileContent.@{file}"
+												          srcfile="@{file}">
+													<filterchain>
+														<headfilter lines="1"/>
+														<striplinebreaks/>
+													</filterchain>
+												</loadfile>
+												<!--                                                        <loadfile property="fileContent.@{file}" srcFile="@{file}" />-->
+												<echo message="jar.md file content: ${fileContent.@{file}}"/>
+												<condition property="isUrl.@{file}">
+													<contains string="${fileContent.@{file}}"
+													          substring="http"/>
+												</condition>
+												<echo message="isUrl: ${isUrl.@{file}}"/>
+												<if>
+													<equals arg1="${isUrl.@{file}}"
+													        arg2="true"/>
+													<then>
+														<echo message="Downloading file from url: ${fileContent.@{file}}"/>
+														<!-- check if file exists-->
+														<condition property="file.exists.@{file}">
+															<available file="${dest.file.name.@{file}}"/>
+														</condition>
+														<if>
+															<equals arg1="${file.exists.@{file}}"
+															        arg2="true"/>
+															<then>
+																<echo message="File already exists: ${dest.file.name.@{file}}, skipping download"/>
+															</then>
+															<else>
+																<echo message="Running curl to download jar file"/>
+																<echo message="curl -u ${jfrog.user}:token -o ${dest.file.name.@{file}} -L -O ${fileContent.@{file}}"/>
+																<exec executable="curl"
+																      failonerror="true">
+																	<!-- <arg value="-u"/>
+																	<arg value="${jfrog.user}:${jfrog.password}"/> -->
+																	<arg value="-o"/>
+																	<arg value="${dest.file.name.@{file}}"/>
+																	<arg value="-L"/>
+																	<arg value="-O"/>
+																	<arg value="${fileContent.@{file}}"/>
+																</exec>
+																<!--                                                                          <get src="${fileContent.@{file}}"-->
+																<!--                                                                               dest="${dest.file.name.@{file}}"-->
+																<!--                                                                               username="${jfrog.user}"-->
+																<!--                                                                               password="${jfrog.password}"/>-->
+																<echo message="Downloaded file: ${dest.file.name.@{file}}"/>
+															</else>
+														</if>
+													</then>
+													<else>
+														<echo message="File content does not contain url, skipping download"/>
+													</else>
+												</if>
+											</else>
+										</if>
+									</sequential>
+								</for>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<exclusions>
+							<exclusion>
+								<groupId>ant</groupId>
+								<artifactId>ant</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+				</dependencies>
+			</plugin>
+    </plugins>
+  </build>
+</project>

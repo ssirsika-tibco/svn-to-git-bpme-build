@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feature id="com.tibco.tpcl.bpm.org.spring.security.feature.extension.site"
+         version="2.1.0.002.2025-01-24-1127"
+         label="com.tibco.tpcl.bpm.org.spring.security.feature Dependencies Feature">
+    <requires>
+        <import feature="com.tibco.tpcl.bpm.javax.ws.rs-api.feature"
+                version="2.2.0.003"
+                match="perfect" />
+        <import feature="com.tibco.tpcl.bpm.org.apache.commons.beanutils.feature"
+                version="1.9.4.002"
+                match="perfect" />
+        <import feature="com.tibco.tpcl.bpm.org.apache.commons.lang.feature"
+                version="2.6.0.001"
+                match="perfect" />
+        <import feature="com.tibco.tpcl.bpm.org.springframework.feature"
+                version="5.3.27.002"
+                match="perfect" />
+    </requires>
+</feature>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<project name="com.tibco.bpm.auth.api.feature artifacts">
+<!-- THIS IS A GENERATED FILE.  Any changes you make will be destroyed. -->
+    <property name="feature_com.tibco.bpm.auth.api.feature" value="1.1.0.DEV-2025-01-24-1128-Sushant" />
+    <property name="plugin_com.tibco.bpm.auth.api.feature-com.tibco.bpm.auth.api" value="1.1.0.DEV-2025-01-24-1128-Sushant" />
+</project>

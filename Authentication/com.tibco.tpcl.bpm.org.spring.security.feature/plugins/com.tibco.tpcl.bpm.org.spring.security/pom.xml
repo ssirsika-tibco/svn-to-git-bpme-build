@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @Generated on 2024-12-16 12:34:49 with /Common/build/utilities/convert-to-maven-build/buildutil.xml -->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.tibco.bpm.auth</groupId>
+    <artifactId>com.tibco.tpcl.bpm.org.spring.security.feature.ru</artifactId>
+    <version>5.7.12-SNAPSHOT</version>
+    <relativePath>../../</relativePath>
+  </parent>
+  <groupId>com.tibco.bpm.auth</groupId>
+  <artifactId>com.tibco.tpcl.bpm.org.spring.security</artifactId>
+  <version>5.7.12-SNAPSHOT</version>
+  <packaging>eclipse-plugin</packaging>
+
+  <properties>
+	<repository.dir>../../../build-artifacts/repository/repository</repository.dir>
+  </properties>
+
+  <build>
+		<plugins>
+            <!-- Parse the version so that each part can be used later to determine the parts-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>remove-snapshot</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+             <!-- Copy the jar files from target to the repository -->
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.1</version>
+				<executions>
+					<execution>
+						<id>copy-jars</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+                            <overwrite>false</overwrite>
+							<outputDirectory>${repository.dir}/com/tibco/bpm/karaf/ace/${project.artifactId}/${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/target</directory>
+									<filtering>false</filtering>
+									<includes>
+										<include>${project.artifactId}-*.jar</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>      
+		</plugins>
+	</build>	
+</project>

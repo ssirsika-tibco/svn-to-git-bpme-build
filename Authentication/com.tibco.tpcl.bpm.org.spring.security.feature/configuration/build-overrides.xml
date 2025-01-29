@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="n2-build-overrides">
+    <dirname property="n2-build-overrides.dir" file="${ant.file.n2-build-overrides}" />
+
+    <resources id="autobuild.contingent.constraints">
+        <url url="http://uk-n2-hudson1.emea.tibco.com:8282/userContent/baselines/wbpm-platform/V01/publish/build.constraints"/>
+    </resources>
+
+    <condition property="reldist.update.site" value="http://reldist.na.tibco.com:${autobuild.spin.port}/reldist/${site.type}" else="http://reldist.na.tibco.com/reldist/${site.type}">
+        <isset property="autobuild.spin.port" />
+    </condition>
+
+    <condition property="shared.update.site" value="http://${share.ip}/shared-builds" else="${reldist.update.site}">
+        <isset property="share.ip" />
+    </condition>
+
+    <condition property="backup.update.site" value="${backup.share.url}" else="http://reldist.na.tibco.com/reldist/${site.type}">
+        <isset property="backup.share.url" />
+    </condition>
+
+    <updatesites id="autobuild.workspace.update-sites.list">
+        <updatesite url="${reldist.update.site}" />
+        <updatesite url="${shared.update.site}" />
+        <updatesite url="${backup.update.site}" />
+    </updatesites>
+
+    <property name="autobuild.obfuscator.style" value="none"/>
+	<property name="reldist.download.enable" value="true"/>
+	<property name="javacSource" value="1.8"/>
+    <property name="javacTarget" value="1.8" />    
+	<property name="autobuild.jdk.force-110" value="true"/>
+	<property name="autobuild.version.eclipse" value="4.7" />
+    <property name="site.type" value="release"/>
+
+</project>

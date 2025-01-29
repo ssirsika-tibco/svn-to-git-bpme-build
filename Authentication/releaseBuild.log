@@ -1,0 +1,264 @@
+Trying to override old definition of task invoke.feature.maven.target.msg
+
+build:
+
+-set-timestamp:
+
+-load-ant-contrib:
+
+-set-pdehost:
+
+-set-express-build-properties:
+
+-set-build-properties:
+
+-feature-set:
+
+-release-unit-set:
+
+-release-discover-tagsURL:
+
+-check-svn-props-new:
+
+-check-user-overrides:
+
+-create-overrides:
+
+-switch-jdk-version:
+
+-get-platform:
+
+-set-osx-classpath:
+
+-set-windows-classpath:
+
+-set-bootclasspath:
+
+-check-eclipse-macro:
+
+-check-eclipse-vers:
+
+-set-and-spin:
+
+-set-eclipse-targets:
+
+-set-osgi-debug-options:
+
+-check-eclipse:
+
+-set-startup-property:
+
+-check-others:
+     [xslt] Processing C:\Code\WBPM\ace\branches\sv2git-migration\Authentication\com.tibco.bpm.karaf.deps.feature\features\com.tibco.bpm.karaf.deps.feature\feature.xml to C:\Code\WBPM\ace\branches\sv2git-migration\Authentication\com.tibco.bpm.karaf.deps.feature\null1658006101
+     [xslt] Loading stylesheet C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts\private\extractPlugins.xsl
+   [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\Authentication\com.tibco.bpm.karaf.deps.feature\null1658006101
+
+-check-properties:
+
+-print.basedir:
+
+dual.build.enable:
+
+autobuild.p2.packaging:
+
+autobuild.boilerplate.version:
+
+autobuild.svn.tagsURL:
+
+javacSource:
+
+autobuild.jdk.force-15:
+
+autobuild.jdk.force-16:
+
+autobuild.jdk.force-17:
+
+autobuild.jdk.force-18:
+
+autobuild.jdk.force-110:
+
+autobuild.dir.java-classes:
+
+autobuild.dir.java15-classes:
+
+autobuild.dir.java16-classes:
+
+autobuild.dir.java17-classes:
+
+autobuild.dir.java18-classes:
+
+autobuild.dir.java110-classes:
+
+showprop:
+
+-display-parameters:
+     [echo] Release Unit: com.tibco.bpm.karaf.deps.feature
+     [echo] Feature: com.tibco.bpm.karaf.deps.feature
+     [echo] Eclipse host: C:\Users\Sushant.Sirsikar\tibco-build\eclipse\4.11
+     [echo] Eclipse target: C:\Users\Sushant.Sirsikar\tibco-build\eclipse\4.7.3
+     [echo] Configuration: C:\Users\Sushant.Sirsikar\tibco-build\configurations\lblm\BPM\Authentication\com.tibco.bpm.karaf.deps.feature\extensionLoc\eclipse
+     [echo] Java: C:\InstalledSoftwares\Java-JDK-11.0.24\lib
+     [echo] Scripts: C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts
+     [echo] User Overrides: C:\Users\Sushant.Sirsikar\tibco-build\user-overrides.xml
+     [echo] Per-User Release Unit Overrides: not in use
+     [echo] Output base: C:\Users\Sushant.Sirsikar\tibco-build\candidates
+     [echo] Tags look like: [repository root url]/tags/Authentication/com.tibco.bpm.karaf.deps.feature-x.y.z.nnn/com.tibco.bpm.karaf.deps.feature
+
+clean:
+
+-load-ant-contrib:
+
+-pre-custom-actions:
+
+download-release-units:
+
+generate-feature-xml:
+
+-set-timestamp:
+
+-set-pdehost:
+
+-set-express-build-properties:
+
+-set-build-properties:
+
+-feature-set:
+
+-release-unit-set:
+
+-release-discover-tagsURL:
+
+-check-svn-props-new:
+
+-check-user-overrides:
+
+-create-overrides:
+
+-switch-jdk-version:
+
+-get-platform:
+
+-set-osx-classpath:
+
+-set-windows-classpath:
+
+-set-bootclasspath:
+
+-check-eclipse-macro:
+
+-check-eclipse-vers:
+
+-set-and-spin:
+
+-set-eclipse-targets:
+
+-set-osgi-debug-options:
+
+-check-eclipse:
+
+-set-startup-property:
+
+-check-others:
+     [xslt] Processing C:\Code\WBPM\ace\branches\sv2git-migration\Authentication\com.tibco.bpm.karaf.deps.feature\features\com.tibco.bpm.karaf.deps.feature\feature.xml to C:\Code\WBPM\ace\branches\sv2git-migration\Authentication\com.tibco.bpm.karaf.deps.feature\null924154418
+     [xslt] Loading stylesheet C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts\private\extractPlugins.xsl
+   [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\Authentication\com.tibco.bpm.karaf.deps.feature\null924154418
+
+-check-properties:
+
+-print.basedir:
+
+dual.build.enable:
+
+autobuild.p2.packaging:
+
+autobuild.boilerplate.version:
+
+autobuild.svn.tagsURL:
+
+javacSource:
+
+autobuild.jdk.force-15:
+
+autobuild.jdk.force-16:
+
+autobuild.jdk.force-17:
+
+autobuild.jdk.force-18:
+
+autobuild.jdk.force-110:
+
+autobuild.dir.java-classes:
+
+autobuild.dir.java15-classes:
+
+autobuild.dir.java16-classes:
+
+autobuild.dir.java17-classes:
+
+autobuild.dir.java18-classes:
+
+autobuild.dir.java110-classes:
+
+showprop:
+
+-display-parameters:
+     [echo] Release Unit: com.tibco.bpm.karaf.deps.feature
+     [echo] Feature: com.tibco.bpm.karaf.deps.feature
+     [echo] Eclipse host: C:\Users\Sushant.Sirsikar\tibco-build\eclipse\4.11
+     [echo] Eclipse target: C:\Users\Sushant.Sirsikar\tibco-build\eclipse\4.7.3
+     [echo] Configuration: C:\Users\Sushant.Sirsikar\tibco-build\configurations\lblm\BPM\Authentication\com.tibco.bpm.karaf.deps.feature\extensionLoc\eclipse
+     [echo] Java: C:\InstalledSoftwares\Java-JDK-11.0.24\lib
+     [echo] Scripts: C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts
+     [echo] User Overrides: C:\Users\Sushant.Sirsikar\tibco-build\user-overrides.xml
+     [echo] Per-User Release Unit Overrides: not in use
+     [echo] Output base: C:\Users\Sushant.Sirsikar\tibco-build\candidates
+     [echo] Tags look like: [repository root url]/tags/Authentication/com.tibco.bpm.karaf.deps.feature-x.y.z.nnn/com.tibco.bpm.karaf.deps.feature
+
+-make-artifacts-dir:
+
+-copy-user-ru-overrides:
+
+-check-configuration:
+
+-set-workspace-properties:
+
+-create-debug-builds-site:
+
+-check-builds-site:
+
+-which-features-are-needed:
+
+-dual-build-and-substitutions-sites:
+
+-local-update-site-check:
+
+-create-local-update-site:
+
+gather-dependencies:
+
+-collect-dependencies-site-xml:
+
+-set-fixed-output-location:
+
+-set-stamped-output-location:
+
+-set-generic-properties:
+
+-set-role-dependent-properties:
+
+-make-logs-dir:
+    [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\Authentication\com.tibco.bpm.karaf.deps.feature\2025-01-27-0741.Sushant\logs
+
+-collect-logs:
+
+-acquire-doc-plugins:
+
+-prebuild:
+
+-get-release-unit-plugin-ids:
+
+-create-fake-manifests:
+
+-do-ant-runner:
+     [java] Java HotSpot(TM) 64-Bit Server VM warning: Ignoring option PermSize; support was removed in 8.0
+     [java] Java HotSpot(TM) 64-Bit Server VM warning: Ignoring option MaxPermSize; support was removed in 8.0

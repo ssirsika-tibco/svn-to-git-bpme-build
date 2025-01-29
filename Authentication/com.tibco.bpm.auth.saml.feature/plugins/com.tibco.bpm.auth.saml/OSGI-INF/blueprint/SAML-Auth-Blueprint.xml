@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint default-activation="eager"
+	xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs" xmlns:cxf="http://cxf.apache.org/blueprint/core"
+	xsi:schemaLocation="
+             http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+             http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+             http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+             ">
+	
+	<reference id="adminConfigServiceRef" interface="com.tibco.bpm.ace.admin.api.AdminConfigurationService" >
+		<reference-listener bind-method="setReference" ref="samlContextHelper"/>
+	</reference>	
+	<reference id="ssoAuthenticationListener" interface="com.tibco.bpm.auth.api.BPMAuthenticationListener">
+		<reference-listener bind-method="setReference" ref="samlContextHelper"/>
+	</reference>
+
+	<bean id="samlContextHelper" class="com.tibco.bpm.auth.saml.SAMLContextHelper" scope="singleton">
+	</bean>
+	
+	<service ref="samlLoginModule" interface="javax.security.auth.spi.LoginModule"></service>
+
+<!-- 	 <bean id="springBridge" class="com.tibco.bpm.blueprint.spring.bridge.SpringBridge"
+		init-method="init" destroy-method="destroy">
+		<property name="bundleInfo" ref="bundleInfo" />
+		<property name="springContexts">
+			<list>
+				<value>classpath:resources/spring.xml
+				</value>
+			</list>
+		</property>
+	</bean>
+ -->
+	<bean id="bundleInfoFactory" class="com.tibco.bpm.blueprint.spring.bridge.BundleInfoFactory">
+		<property name="blueprintBundle" ref="blueprintBundle" />
+	</bean>
+
+	<bean id="bundleInfo" factory-ref="bundleInfoFactory"
+		factory-method="createBundleInfo" />
+
+	<bean id="samlLoginModule" class="com.tibco.bpm.auth.saml.BPMSAMLLoginModule">
+	</bean>
+	
+	<bean id="samlLogoutHandler" class="com.tibco.bpm.auth.saml.handler.BPMSAMLLogoutHandler">
+	</bean>
+	
+	<service ref="samlLogoutHandler" interface="com.tibco.bpm.auth.api.BPMLogoutHandler"></service>
+	
+	<bean id="samlPropertyChangeServiceImpl" class="com.tibco.bpm.auth.saml.SamlPropertyChangeListener">
+	</bean>
+	
+	<service ref="samlPropertyChangeServiceImpl"
+		interface="com.tibco.bpm.ace.admin.api.PropertyChangeService">
+		<service-properties>
+			<entry key="groupIds">
+				<array value-type="java.lang.String">
+					<value>auth</value>
+				</array>
+			</entry>
+		</service-properties>
+	</service>	
+	
+</blueprint>
