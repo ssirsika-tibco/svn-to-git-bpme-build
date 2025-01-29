@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ScriptEngine API
+Bundle-SymbolicName: com.tibco.bpm.se.api
+Bundle-Version: 1.3.0.qualifier
+Bundle-Vendor: TIBCO
+Bundle-ClassPath: .,
+ lib/se-1.0.0-SNAPSHOT.jar,
+ lib/guava-16.0.1.jar,
+ se-library.jar
+Export-Package: com.tibco.bpm.se.api;version="1.3.0",
+ com.tibco.bpm.se.internal;version="1.3.0",
+ com.tibco.bpm.se.logging;version="1.3.0"
+Import-Package: com.fasterxml.jackson.core;version="[2.0.0,3.0.0)";resolution:=optional,
+ com.fasterxml.jackson.databind;version="[2.0.0,3.0.0)";resolution:=optional,
+ com.fasterxml.jackson.databind.exc;version="[2.0.0,3.0.0)";resolution:=optional,
+ com.fasterxml.jackson.databind.node;version="[2.0.0,3.0.0)",
+ com.fasterxml.jackson.jaxrs.json;version="[2.0.0,3.0.0)";resolution:=optional,
+ javax.script,
+ javax.xml.datatype
+Require-Bundle: com.tibco.n2.logging;bundle-version="[1.13.0,2.0.0)",
+ com.tibco.bpm.logging.cloud.common;bundle-version="[1.0.0,2.0.0)";resolution:=optional,
+ com.tibco.bpm.logging.cloud.runtime;bundle-version="[1.0.0,2.0.0)";resolution:=optional
+

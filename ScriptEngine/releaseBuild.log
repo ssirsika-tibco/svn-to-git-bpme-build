@@ -1,0 +1,658 @@
+Trying to override old definition of task invoke.feature.maven.target.msg
+
+build:
+
+-set-timestamp:
+
+-load-ant-contrib:
+
+-set-pdehost:
+
+-set-express-build-properties:
+
+-set-build-properties:
+
+-feature-set:
+
+-release-unit-set:
+
+-release-discover-tagsURL:
+
+-check-svn-props-new:
+
+-check-user-overrides:
+
+-create-overrides:
+
+-switch-jdk-version:
+
+-get-platform:
+
+-set-osx-classpath:
+
+-set-windows-classpath:
+
+-set-bootclasspath:
+
+-check-eclipse-macro:
+
+-check-eclipse-vers:
+
+-set-and-spin:
+
+-set-eclipse-targets:
+
+-set-osgi-debug-options:
+
+-check-eclipse:
+
+-set-startup-property:
+
+-check-others:
+     [xslt] Processing C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\features\com.tibco.bpm.se.api.feature\feature.xml to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null1898507492
+     [xslt] Loading stylesheet C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts\private\extractPlugins.xsl
+   [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null1898507492
+
+-check-properties:
+
+-print.basedir:
+
+dual.build.enable:
+
+autobuild.p2.packaging:
+
+autobuild.boilerplate.version:
+
+autobuild.svn.tagsURL:
+
+javacSource:
+
+autobuild.jdk.force-15:
+
+autobuild.jdk.force-16:
+
+autobuild.jdk.force-17:
+
+autobuild.jdk.force-18:
+
+autobuild.jdk.force-110:
+
+autobuild.dir.java-classes:
+
+autobuild.dir.java15-classes:
+
+autobuild.dir.java16-classes:
+
+autobuild.dir.java17-classes:
+
+autobuild.dir.java18-classes:
+
+autobuild.dir.java110-classes:
+
+showprop:
+
+-display-parameters:
+     [echo] Release Unit: com.tibco.bpm.se.api.feature
+     [echo] Feature: com.tibco.bpm.se.api.feature
+     [echo] Eclipse host: C:\Users\Sushant.Sirsikar\tibco-build\eclipse\4.11
+     [echo] Eclipse target: C:\Users\Sushant.Sirsikar\tibco-build\eclipse\3.7.2
+     [echo] Configuration: C:\Users\Sushant.Sirsikar\tibco-build\configurations\lblm\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\extensionLoc\eclipse
+     [echo] Java: C:\InstalledSoftwares\Java-JDK-11.0.24\lib
+     [echo] Scripts: C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts
+     [echo] User Overrides: C:\Users\Sushant.Sirsikar\tibco-build\user-overrides.xml
+     [echo] Per-User Release Unit Overrides: not in use
+     [echo] Output base: C:\Users\Sushant.Sirsikar\tibco-build\candidates
+     [echo] Tags look like: [repository root url]/tags/ScriptEngine/com.tibco.bpm.se.api.feature-x.y.z.nnn/com.tibco.bpm.se.api.feature
+
+clean:
+
+-load-ant-contrib:
+
+-pre-custom-actions:
+
+download-release-units:
+
+generate-feature-xml:
+
+-set-timestamp:
+
+-set-pdehost:
+
+-set-express-build-properties:
+
+-set-build-properties:
+
+-feature-set:
+
+-release-unit-set:
+
+-release-discover-tagsURL:
+
+-check-svn-props-new:
+
+-check-user-overrides:
+
+-create-overrides:
+
+-switch-jdk-version:
+
+-get-platform:
+
+-set-osx-classpath:
+
+-set-windows-classpath:
+
+-set-bootclasspath:
+
+-check-eclipse-macro:
+
+-check-eclipse-vers:
+
+-set-and-spin:
+
+-set-eclipse-targets:
+
+-set-osgi-debug-options:
+
+-check-eclipse:
+
+-set-startup-property:
+
+-check-others:
+     [xslt] Processing C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\features\com.tibco.bpm.se.api.feature\feature.xml to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null2008443824
+     [xslt] Loading stylesheet C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts\private\extractPlugins.xsl
+   [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null2008443824
+
+-check-properties:
+
+-print.basedir:
+
+dual.build.enable:
+
+autobuild.p2.packaging:
+
+autobuild.boilerplate.version:
+
+autobuild.svn.tagsURL:
+
+javacSource:
+
+autobuild.jdk.force-15:
+
+autobuild.jdk.force-16:
+
+autobuild.jdk.force-17:
+
+autobuild.jdk.force-18:
+
+autobuild.jdk.force-110:
+
+autobuild.dir.java-classes:
+
+autobuild.dir.java15-classes:
+
+autobuild.dir.java16-classes:
+
+autobuild.dir.java17-classes:
+
+autobuild.dir.java18-classes:
+
+autobuild.dir.java110-classes:
+
+showprop:
+
+-display-parameters:
+     [echo] Release Unit: com.tibco.bpm.se.api.feature
+     [echo] Feature: com.tibco.bpm.se.api.feature
+     [echo] Eclipse host: C:\Users\Sushant.Sirsikar\tibco-build\eclipse\4.11
+     [echo] Eclipse target: C:\Users\Sushant.Sirsikar\tibco-build\eclipse\3.7.2
+     [echo] Configuration: C:\Users\Sushant.Sirsikar\tibco-build\configurations\lblm\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\extensionLoc\eclipse
+     [echo] Java: C:\InstalledSoftwares\Java-JDK-11.0.24\lib
+     [echo] Scripts: C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts
+     [echo] User Overrides: C:\Users\Sushant.Sirsikar\tibco-build\user-overrides.xml
+     [echo] Per-User Release Unit Overrides: not in use
+     [echo] Output base: C:\Users\Sushant.Sirsikar\tibco-build\candidates
+     [echo] Tags look like: [repository root url]/tags/ScriptEngine/com.tibco.bpm.se.api.feature-x.y.z.nnn/com.tibco.bpm.se.api.feature
+
+-make-artifacts-dir:
+
+-copy-user-ru-overrides:
+
+-check-configuration:
+
+-set-workspace-properties:
+
+-create-debug-builds-site:
+
+-check-builds-site:
+
+-which-features-are-needed:
+
+-dual-build-and-substitutions-sites:
+
+-local-update-site-check:
+
+-create-local-update-site:
+
+gather-dependencies:
+
+-collect-dependencies-site-xml:
+     [copy] Copying 1 file to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\build-artifacts
+
+-set-fixed-output-location:
+
+-set-stamped-output-location:
+
+-set-generic-properties:
+
+-set-role-dependent-properties:
+
+-make-logs-dir:
+    [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\logs
+
+-collect-logs:
+
+-acquire-doc-plugins:
+
+-prebuild:
+
+-get-release-unit-plugin-ids:
+
+-create-fake-manifests:
+
+-do-ant-runner:
+     [java] Java HotSpot(TM) 64-Bit Server VM warning: Ignoring option PermSize; support was removed in 8.0
+     [java] Java HotSpot(TM) 64-Bit Server VM warning: Ignoring option MaxPermSize; support was removed in 8.0
+     [java] Buildfile: C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts/build-release-unit.xml
+     [java] 
+     [java] -write-last-build-failed:
+     [java] 
+     [java] -check-existence:
+     [java] 
+     [java] -start-log:
+     [java] 
+     [java] -release-discover-tagsURL:
+     [java] 
+     [java] -release-get-svn-tags:
+     [java] 
+     [java] -release-get-last-built-version:
+     [java] 
+     [java] -release-load-last-built-buildnos:
+     [java] 
+     [java] -release-set-properties:
+     [java] 
+     [java] -integration-check-official-release:
+     [java] 
+     [java] -integration-discover-tagsURL:
+     [java] 
+     [java] -integration-get-svn-tags:
+     [java] 
+     [java] -integration-get-last-built-version:
+     [java] 
+     [java] -integration-load-last-built-buildnos:
+     [java] 
+     [java] -integration-set-properties:
+     [java] 
+     [java] -check-feature-match:
+     [java] 
+     [java] -developer-generate-qualifier:
+     [java] 
+     [java] -set-role-specific-properties:
+     [java] 
+     [java] -verify-qualifier-macro:
+     [java] 
+     [java] -verify-qualifier:
+     [java]      [xslt] Processing C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\features\com.tibco.bpm.se.api.feature\feature.xml to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null497925723
+     [java]      [xslt] Loading stylesheet C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts\private\featureVersion.xsl
+     [java]    [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null497925723
+     [java]      [xslt] Processing C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\features\com.tibco.bpm.se.api.feature\feature.xml to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null497925723
+     [java]      [xslt] Loading stylesheet C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts\private\extractPlugins.xsl
+     [java]    [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null497925723
+     [java] 
+     [java] -prop-set-macro:
+     [java] 
+     [java] -generate-feature-build-qualifiers:
+     [java] [propertyfile] Creating new property file: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\featureVersions.properties
+     [java] 
+     [java] -generate-plugin-build-qualifiers:
+     [java] [propertyfile] Updating property file: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\pluginVersions.properties
+     [java] 
+     [java] -define-verify-qualifiers-file:
+     [java] 
+     [java] -generate-qualifier-suffix:
+     [java] 
+     [java] -stop-log:
+     [java] 
+     [java] -generate-build-qualifiers:
+     [java] 
+     [java] -write-site-provenance-xml:
+     [java] 
+     [java] -set-javadoc-destination:
+     [java] 
+     [java] -set-sources-destination:
+     [java] 
+     [java] -export-code-feature:
+     [java] 
+     [java] -verify-manifest:
+     [java]      [xslt] Processing C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\features\com.tibco.bpm.se.api.feature\feature.xml to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null2008443824
+     [java]      [xslt] Loading stylesheet C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts\private\extractPlugins.xsl
+     [java]    [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null2008443824
+     [java] 
+     [java] export-one-feature:
+     [java]      [echo] "        ********************************************
+     [java]      [echo] 
+     [java]      [echo]         BUILDING com.tibco.bpm.se.api.feature
+     [java]      [echo] 
+     [java]      [echo]         Using:
+     [java]      [echo]  C:\Users\Sushant.Sirsikar\tibco-build\configurations\lblm\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\extensionLoc\eclipse
+     [java]      [echo] 
+     [java]      [echo]         ************************************************************"
+     [java] 
+     [java] _pre-clean:
+     [java]       [zip] Building zip: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\build-artifacts\build-com.tibco.bpm.se.api.feature.zip
+     [java] 
+     [java] init:
+     [java] 
+     [java] clean:
+     [java] 
+     [java] init:
+     [java] 
+     [java] all.features:
+     [java] 
+     [java] all.plugins:
+     [java] 
+     [java] properties:
+     [java] 
+     [java] init:
+     [java] 
+     [java] clean:
+     [java]    [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\plugins\com.tibco.bpm.se.api\se-library.jar
+     [java] 
+     [java] update.feature:
+     [java] 
+     [java] all.children:
+     [java] 
+     [java] build.jars:
+     [java] 
+     [java] init:
+     [java] 
+     [java] all.features:
+     [java] 
+     [java] all.plugins:
+     [java] 
+     [java] properties:
+     [java] 
+     [java] init:
+     [java] 
+     [java] build.jars:
+     [java] 
+     [java] properties:
+     [java] 
+     [java] init:
+     [java] 
+     [java] se-library.jar.nestedJars:
+     [java] 
+     [java] se-library.jar:
+     [java]     [mkdir] Created dir: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\plugins\com.tibco.bpm.se.api\temp.folder\se-library.jar.bin
+     [java]     [javac] Compiling 2 source files to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\plugins\com.tibco.bpm.se.api\temp.folder\se-library.jar.bin
+     [java] 
+     [java] checkCompilationResults:
+     [java]       [jar] Building jar: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\plugins\com.tibco.bpm.se.api\se-library.jar
+     [java]    [delete] Deleting directory C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\plugins\com.tibco.bpm.se.api\temp.folder\se-library.jar.bin
+     [java] 
+     [java] update.feature:
+     [java] 
+     [java] all.children:
+     [java] 
+     [java] -make-output-directories:
+     [java]     [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\debug\features
+     [java]     [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\debug\plugins
+     [java]     [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\release\eclipse\features
+     [java]     [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\release\eclipse\plugins
+     [java]     [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\debug\features
+     [java]     [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\debug\plugins
+     [java]     [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\release\features
+     [java]     [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\release\plugins
+     [java] 
+     [java] -assemble-features-*_*_*:
+     [java] 
+     [java] init:
+     [java] 
+     [java] gather.bin.parts:
+     [java]     [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\debug\features\com.tibco.bpm.se.api.feature_1.3.0.DEV-2025-01-24-1131-Sushant
+     [java] 
+     [java] children:
+     [java]      [copy] Copying 3 files to C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\debug\features\com.tibco.bpm.se.api.feature_1.3.0.DEV-2025-01-24-1131-Sushant
+     [java] 
+     [java] rootFiles:
+     [java] 
+     [java] rootFiles*_*_*:
+     [java]       [zip] Building zip: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\debug\features\com.tibco.bpm.se.api.feature_1.3.0.DEV-2025-01-24-1131-Sushant.jar
+     [java] 
+     [java] -copy-and-zip-feature:
+     [java]      [copy] Copying 3 files to C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\release\eclipse\features\com.tibco.bpm.se.api.feature_1.3.0.DEV-2025-01-24-1131-Sushant
+     [java]       [zip] Building zip: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\release\features\com.tibco.bpm.se.api.feature_1.3.0.DEV-2025-01-24-1131-Sushant.jar
+     [java] 
+     [java] -gather-bin-parts-com.tibco.bpm.se.api-debug-extension:
+     [java] 
+     [java] properties:
+     [java] 
+     [java] init:
+     [java] 
+     [java] gather.bin.parts:
+     [java]     [mkdir] Created dir: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\debug\plugins\com.tibco.bpm.se.api_1.3.0.DEV-2025-01-24-1131-Sushant
+     [java]      [copy] Copying 1 file to C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\debug\plugins\com.tibco.bpm.se.api_1.3.0.DEV-2025-01-24-1131-Sushant
+     [java]      [copy] Copying 4 files to C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\debug\plugins\com.tibco.bpm.se.api_1.3.0.DEV-2025-01-24-1131-Sushant
+     [java] 
+     [java] apitools.generation:
+     [java] 
+     [java] -gather-bin-parts-com.tibco.bpm.se.api-debug-update:
+     [java]       [zip] Building zip: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\debug\plugins\com.tibco.bpm.se.api_1.3.0.DEV-2025-01-24-1131-Sushant.jar
+     [java] 
+     [java] -gather-bin-parts-com.tibco.bpm.se.api-release-extension:
+     [java]      [copy] Copying 4 files to C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\release\eclipse\plugins\com.tibco.bpm.se.api_1.3.0.DEV-2025-01-24-1131-Sushant
+     [java] 
+     [java] -gather-bin-parts-com.tibco.bpm.se.api-release-update:
+     [java]      [copy] Copying 1 file to C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\release\plugins
+     [java] 
+     [java] -gather-bin-parts-com.tibco.bpm.se.api:
+     [java] 
+     [java] gather.bin.parts-*_*_*:
+     [java] 
+     [java] assemble-*_*_*:
+     [java] 
+     [java] -copy-feature-to-local-site-release:
+     [java]      [copy] Copying 1 file to C:\Users\Sushant.Sirsikar\tibco-build\workspaceInstaller\local-builds-site\features
+     [java]      [copy] Copying 1 file to C:\Users\Sushant.Sirsikar\tibco-build\workspaceInstaller\local-builds-site\plugins
+     [java] 
+     [java] -copy-feature-to-local-site-debug:
+     [java]      [copy] Copying 1 file to C:\Users\Sushant.Sirsikar\tibco-build\workspaceInstaller\local-builds-site-debug\features
+     [java]      [copy] Copying 1 file to C:\Users\Sushant.Sirsikar\tibco-build\workspaceInstaller\local-builds-site-debug\plugins
+     [java] 
+     [java] assemble:
+     [java] 
+     [java] clean:
+     [java] 
+     [java] init:
+     [java] 
+     [java] clean:
+     [java] 
+     [java] init:
+     [java] 
+     [java] all.features:
+     [java] 
+     [java] all.plugins:
+     [java] 
+     [java] properties:
+     [java] 
+     [java] init:
+     [java] 
+     [java] clean:
+     [java]    [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\plugins\com.tibco.bpm.se.api\se-library.jar
+     [java]    [delete] Deleting directory C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\plugins\com.tibco.bpm.se.api\temp.folder
+     [java] 
+     [java] update.feature:
+     [java] 
+     [java] all.children:
+     [java] 
+     [java] clean:
+     [java]    [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\assemble.xml
+     [java]    [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\features\com.tibco.bpm.se.api.feature\build.xml
+     [java] 
+     [java] -export-source-feature:
+     [java] 
+     [java] -export-test-feature:
+     [java] 
+     [java] -export-docs-feature:
+     [java] 
+     [java] export-all-features:
+     [java] 
+     [java] -cleanup-temporaries:
+     [java]      [move] Moving 2 files to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\build-artifacts
+     [java] 
+     [java] -compress-logs:
+     [java]      [gzip] Building: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\logs\feature-com.tibco.bpm.se.api.feature.log.gz
+     [java]    [delete] Deleting: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\logs\feature-com.tibco.bpm.se.api.feature.log
+     [java]      [gzip] Building: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\logs\generator-assemble.xml-com.tibco.bpm.se.api.feature.log.gz
+     [java]    [delete] Deleting: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\logs\generator-assemble.xml-com.tibco.bpm.se.api.feature.log
+     [java]      [gzip] Building: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\logs\setup-com.tibco.bpm.se.api.feature.log.gz
+     [java]    [delete] Deleting: C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\logs\setup-com.tibco.bpm.se.api.feature.log
+     [java] BUILD SUCCESSFUL
+     [java] 
+     [java] BUILD SUCCESSFUL
+     [java] Total time: 27 seconds
+
+-get-release-unit-plugin-ids:
+
+-restore-release-unit-plugins:
+
+-get-candidate-plugins:
+
+-restore-candidate-plugins:
+
+-restore-fake-manifests:
+
+-generate-sites:
+[update.site.creator] (Ignoring) Unable to delete file C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\release\site.xml
+[update.site.creator] (Ignoring) Unable to delete file C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\debug\site.xml
+
+-relocate-fixed-release:
+
+-developer-write-last-build-succeeded:
+   [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\build-artifacts\latest-build.xml
+     [xslt] Processing C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\release\eclipse\features\com.tibco.bpm.se.api.feature_1.3.0.DEV-2025-01-24-1131-Sushant\feature.xml to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null2008443824
+     [xslt] Loading stylesheet C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts\private\extractPlugins.xsl
+   [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null2008443824
+
+-release-write-last-build-succeeded:
+
+-write-last-build-succeeded:
+
+-postbuild:
+
+-decease-doc-plugins:
+
+-merge-features:
+
+-merge-plugins:
+
+-generate-merged-jar:
+
+-merge-release-units:
+
+-check-for-substitutions:
+
+perform-substitutions-wrapper:
+
+-pre-design-release-unit:
+
+-verify-dual-meta:
+
+-build-design-release-unit:
+
+-generate-release-build-list:
+
+-run-generate-release-build-list:
+
+-read-feature:
+     [xslt] Processing C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\debug\features\com.tibco.bpm.se.api.feature_1.3.0.DEV-2025-01-24-1131-Sushant\feature.xml to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null732811212
+     [xslt] Loading stylesheet C:\Users\Sushant.Sirsikar\tibco-build\tools\builder\2.3\scripts\private\extractPlugins.xsl
+   [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null732811212
+
+-read-plugin:
+
+-check-plugin-unpacked:
+
+-merge-site-provenance-xml:
+
+-dual-build-autorun:
+
+-load-archivist-libs:
+
+archivist-diff:
+
+-set-env-version:
+
+-zip-assembly-package:
+
+check.version.conformance:
+[check.version.conformance] Scanning update sites.
+[check.version.conformance]   Scanning http://spin.tibco.com/GA/release/site.xml
+[check.version.conformance]   Scanning http://spin.tibco.com/GA/thirdparty/site.xml
+[check.version.conformance]   Scanning http://spin.tibco.com/GA/devtools/site.xml
+
+-generate-p2-jars:
+
+-sign-jars:
+
+-acquire-buildno:
+   [delete] Deleting: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\com.tibco.bpm.se.api.feature\null1534576848
+
+-post-custom-actions:
+
+build:
+     [echo] 
+     [echo] +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     [echo] +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     [echo] +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     [echo] +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     [echo] 
+     [echo] COMPLETED
+     [echo] 
+     [echo]    version info:
+     [echo]    
+     [echo]    features:
+     [echo]         
+     [echo]        com.tibco.bpm.se.api.feature_1.3.0.DEV-2025-01-24-1131-Sushant
+     [echo]                         
+     [echo]    plugins:
+     [echo]         
+     [echo]         com.tibco.bpm.se.api_1.3.0.DEV-2025-01-24-1131-Sushant
+     [echo]                         
+     [echo]    
+     [echo]    BPM/com.tibco.bpm.se.api.feature
+     [echo] 
+     [echo]    com.tibco.bpm.se.api.feature
+     [echo] 
+     [echo]    release update site:
+     [echo]    C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\release
+     [echo] 
+     [echo]    debug update site:
+     [echo]    C:\Users\Sushant.Sirsikar\tibco-build\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature\2025-01-24-1131.Sushant\jar\debug
+     [echo] 
+     [echo]    Build started: 05:01 PM 24 January 2025
+     [echo] 
+     [echo] +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     [echo] +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     [echo] +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     [echo] +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     [echo]         
+
+kar:
+   [delete] Deleting directory C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\kar\repository\repository
+    [mkdir] Created dir: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\kar\repository\repository
+     [copy] Copying 1 file to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\kar\repository\repository\com\tibco\bpm\karaf\ace\com.tibco.bpm.se.api\1.3.0
+     [move] Moving 1 file to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\kar\repository\repository\com\tibco\bpm\karaf\ace\com.tibco.bpm.se.api\1.3.0
+    [mkdir] Created dir: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\kar\repository\repository\com\tibco\bpm\karaf\com.tibco.bpm.karaf.se-api-kar\1.3.0\com.tibco.bpm.karaf.se-api-kar-1.3.0
+      [zip] Building zip: C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\kar\com.tibco.bpm.se-api.zip
+     [move] Moving 1 file to C:\Code\WBPM\ace\branches\sv2git-migration\ScriptEngine\kar

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="zip-up-db-scripts" default="package" basedir=".">
+
+	<property name="work.dir" value="${basedir}/work"/>
+	<property name="db.dir" value="${work.dir}/database"/>
+	<property name="db.scr.dir" value="${basedir}/com.tibco.bpm.cdm.core.feature/plugins/com.tibco.bpm.cdm.core/database"/>
+    <property name="temp.dir" value="${basedir}/temp"/>
+	
+	<target name="clean">
+		<delete dir="${work.dir}" />
+		<delete dir="${temp.dir}" />
+	</target>
+
+	<target name="package" depends="clean">
+		<copy todir="${temp.dir}/database" overwrite="true">
+			<fileset dir="${db.scr.dir}"/>
+		</copy>
+
+		<zip destfile="${basedir}/cdm-dbscripts.zip" encoding="UTF-8" basedir="${temp.dir}"/>
+	</target>
+
+</project>

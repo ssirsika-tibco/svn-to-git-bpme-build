@@ -1,0 +1,23 @@
+DROP SEQUENCE IF EXISTS cdm_applications_seq;
+DROP SEQUENCE IF EXISTS cdm_datamodels_seq;
+DROP SEQUENCE IF EXISTS cdm_types_seq;
+DROP SEQUENCE IF EXISTS cdm_states_seq;
+DROP SEQUENCE IF EXISTS cdm_links_seq;
+DROP SEQUENCE IF EXISTS cdm_cases_int_seq;
+
+DROP VIEW IF EXISTS cdm_cases CASCADE;
+DROP TABLE IF EXISTS cdm_properties CASCADE;
+DROP TABLE IF EXISTS cdm_case_links CASCADE;
+DROP TABLE IF EXISTS cdm_cases_int CASCADE;
+DROP TABLE IF EXISTS cdm_links CASCADE;
+DROP TABLE IF EXISTS cdm_identifier_infos CASCADE;
+DROP TABLE IF EXISTS cdm_type_indexes CASCADE;
+DROP TABLE IF EXISTS cdm_states CASCADE;
+DROP TABLE IF EXISTS cdm_types CASCADE;
+DROP TABLE IF EXISTS cdm_datamodel_deps CASCADE;
+DROP TABLE IF EXISTS cdm_datamodels CASCADE;
+DROP TABLE IF EXISTS cdm_applications CASCADE;
+
+DROP TABLE IF EXISTS cdm_job_queue CASCADE;
+DROP SEQUENCE IF EXISTS cdm_job_queue_seq;
+

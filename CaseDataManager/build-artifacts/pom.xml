@@ -1,0 +1,124 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.tibco.bpm.cdm</groupId>
+	<artifactId>docker-cdm</artifactId>
+	<packaging>pom</packaging>
+
+	<name>Case Data Manager (CDM) Micro Service</name>
+	<description>CDM MicroService implementation</description>
+	<parent>
+		<groupId>com.tibco.bpm</groupId>
+		<artifactId>bpme-root</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../../Root</relativePath>
+	</parent>
+
+	<properties>
+		<image.name>bpm-docker.emea.tibco.com:443/runtime/containeredition:1.0.dev</image.name>
+	</properties>
+	
+	<!-- Developer information -->
+	<developers>
+		<developer>
+			<name>Joshy Augustine</name>
+			<email>jaugusti@tibco.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+<build>
+		<plugins>
+			
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.3.258</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<dockerDirectory>${project.basedir}</dockerDirectory>
+					<imageName>${image.name}</imageName>
+					<serverId>bpm.docker.repo</serverId>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<profiles>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- Generate Microservice Release Info in a xml file						-->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<profile>
+			<id>vbuild</id>				
+			<build>	
+				<plugins>
+					<plugin>
+						<groupId>com.tibco.ariel.infra.tools</groupId>
+						<artifactId>vbuild-info</artifactId>
+						<version>1.0.0-005</version>
+						<executions>
+							<execution>
+								<id>prep-rel-notes</id>
+								<goals>
+									<goal>prepare</goal>
+								</goals>
+							</execution>
+						</executions>		
+						<configuration> 
+							<userid>n2bld_user</userid>
+							<password>Tibco2010</password>
+						</configuration>
+						<dependencies>
+							<!-- API, java.xml.bind module -->
+							<dependency>
+								<groupId>jakarta.xml.bind</groupId>
+								<artifactId>jakarta.xml.bind-api</artifactId>
+								<version>2.3.2</version>
+							</dependency>
+
+							<!-- Runtime, com.sun.xml.bind module -->
+							<dependency>
+								<groupId>org.glassfish.jaxb</groupId>
+								<artifactId>jaxb-runtime</artifactId>
+								<version>2.3.2</version>
+							</dependency>
+						</dependencies>
+					</plugin>	
+				</plugins>	
+			</build>
+		</profile>	
+	</profiles>
+	
+	
+	<distributionManagement>
+		<repository>
+			<id>archiva.internal</id>
+			<name>Internal Release Repository</name>
+			<url>http://emea-bpm-maven:8080/repository/internal</url>
+		</repository>
+		<snapshotRepository>
+			<id>archiva.snapshots</id>
+			<name>Internal Snapshot Repository</name>
+			<url>http://emea-bpm-maven:8080/repository/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+	<scm>
+		<url>https://emea-swi-svn.emea.tibco.com/svn/WBPM/ace/trunk/CaseDataManager</url>
+		<connection>scm:svn:${url}</connection>
+		<developerConnection>scm:svn:${url}</developerConnection>
+	</scm>		
+
+	<version>1.0.0-SNAPSHOT</version>
+</project>

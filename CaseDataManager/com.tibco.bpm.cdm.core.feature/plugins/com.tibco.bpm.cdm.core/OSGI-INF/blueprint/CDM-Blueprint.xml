@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint default-activation="eager"
+	xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs" xmlns:cxf="http://cxf.apache.org/blueprint/core"
+	xsi:schemaLocation="
+             http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+             http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+             http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+             ">
+
+	<reference id="blueDataSource" interface="javax.sql.DataSource" />
+	<reference id="authSecurityService" interface="com.tibco.bpm.auth.api.BPMSecurityService" />
+	<reference id="securityService" interface="com.tibco.n2.de.api.services.SecurityService" />
+	<!-- Marked optional, as there is a circular reference between CDM and Container Engine -->
+	<!-- The obvious implication is that we need to check this is non-null before attempting to use it -->
+	<reference id="processInstancesAPI" interface="com.tibco.bpm.container.engine.api.ContainerEngineInstances" availability="optional" timeout="1"/>
+	<reference id="adminConfigurationService" interface="com.tibco.bpm.ace.admin.api.AdminConfigurationService"/>
+	<reference id="logProbe" interface="com.tibco.bpm.logging.cloud.common.probe.log.LogProbeProvider" />
+	<reference id="eventProbe" interface="com.tibco.bpm.logging.cloud.common.probe.event.EventProbeProvider" />	
+	<reference id="notificationMonitor" interface="com.tibco.bpm.msg.pq.PgNotificationMonitor" />
+	
+	<bean id="springBridge" class="com.tibco.bpm.blueprint.spring.bridge.SpringBridge" init-method="init" destroy-method="destroy">
+		<property name="bundleInfo" ref="bundleInfo" />
+		<property name="springContexts">
+			<list>
+				<value>classpath:/com/tibco/bpm/cdm/core/config/cdmBeans.xml
+				</value>
+			</list>
+		</property>
+		<property name="blueprintToSpringMappings">
+			<map>
+				<entry key="dataSource" value-ref="blueDataSource" />
+				<entry key="securityService" value-ref="securityService" />
+				<entry key="processInstancesAPI" value-ref="processInstancesAPI" />
+				<entry key="adminConfigurationService" value-ref="adminConfigurationService" />
+				<entry key="notificationMonitor" value-ref="notificationMonitor" />
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="bundleInfoFactory" class="com.tibco.bpm.blueprint.spring.bridge.BundleInfoFactory">
+		<property name="blueprintBundle" ref="blueprintBundle" />
+	</bean>
+	
+	<bean id="bundleInfo" factory-ref="bundleInfoFactory" factory-method="createBundleInfo" />
+	
+	<!-- ============= -->
+	<!-- OSGi Services -->
+	<!-- ============= -->
+
+	<!-- DEM has a listener that will be notified of this service and direct 'Case-Manager' artifacts to it -->
+	
+	<bean id="cdmDeployService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="deploymentServiceImpl" />
+	</bean>
+ 	<service ref="cdmDeployService" interface="com.tibco.bpm.dem.api.DeploymentComponentService">
+    	<service-properties>
+    		<!--  'Case-Manager' is specified in the Deployment FP, but perhaps should be 'Case-Data-Manager' -->
+	        <entry key="targetIdentifier" value="Case-Manager"/>
+	    </service-properties>
+	</service>
+	
+	<!-- The configuration service will call this whenever a property in the 'cdm' group is changed -->
+	<!-- At the time of writing, this means the settings for auto-purge -->
+	
+	<bean id="cdmPropertyChangeService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="propertyChangeServiceImpl" />
+	</bean>	
+	<service ref="cdmPropertyChangeService"
+		interface="com.tibco.bpm.ace.admin.api.PropertyChangeService">
+		<service-properties>
+			<entry key="groupIds">
+				<array value-type="java.lang.String">
+					<value>cdm</value>
+				</array>
+			</entry>
+		</service-properties>
+	</service>	
+	
+	<!-- Admin invokes this to check if CDM is healthy/ready -->
+
+	<bean id="cdmComponentStatusService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="componentStatusServiceImpl" />
+	</bean>
+	<service ref="cdmComponentStatusService" interface="com.tibco.bpm.ace.admin.api.ComponentStatusService">
+	</service>
+
+	<!-- CDM private API service -->
+	
+	<bean id="caseDataManagerService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="cdmPrivateAPITx" />
+	</bean>
+	<service ref="caseDataManagerService" interface="com.tibco.bpm.cdm.api.CaseDataManager">
+	</service>
+	
+	<bean id="typesPrivateService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="typesServiceLocalTx" />
+	</bean>
+	<service ref="typesPrivateService" interface="com.tibco.bpm.cdm.core.TypesPrivateService">
+	</service>
+	
+	
+
+	<bean id="seService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="scriptEngineServiceTx" />
+	</bean>
+		
+ 	<service ref="seService" interface="com.tibco.bpm.se.api.ScriptEngineService">
+	</service>
+
+	<!-- ============================================ -->
+	<!-- Case Lifecycle Notification (CLN) processing -->
+	<!-- ============================================ -->
+
+	<bean id="clnObserverList" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="clnObserverList" />
+	</bean>
+
+	<reference-list id="CaseLifecycleNotificationObserverReferenceList" interface="com.tibco.bpm.cdm.api.CaseLifecycleNotificationObserver" availability="optional">
+   		<reference-listener bind-method="bind" unbind-method="unbind">
+			<bean class="com.tibco.bpm.cdm.core.cln.CLNObserverReferenceListener">
+				<property name="clnObserverList" ref="clnObserverList" />
+			</bean>
+		</reference-listener>
+	</reference-list>
+
+	<!-- ================================= -->
+	<!-- REST service implementation beans -->
+	<!-- ================================= -->
+	
+	<bean id="casesService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="casesServiceImplV1Tx" />
+	</bean>
+	
+	<bean id="typesService" factory-ref="springBridge" factory-method="lookupSpringBean">
+		<argument value="typesServiceImplV1" />
+	</bean>
+	
+	<!-- JAX-RS Endpoint -->
+	
+	<jaxrs:server id="cdmServiceREST" address="/case/v1">
+		<jaxrs:serviceBeans>
+			<ref component-id="casesService" />
+			<ref component-id="typesService" />
+ 		</jaxrs:serviceBeans>
+
+		<jaxrs:extensionMappings>
+			<entry key="json" value="application/json" />
+		</jaxrs:extensionMappings>
+
+		<jaxrs:providers>
+			<bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+			<bean id="exceptionMapper" class="com.tibco.bpm.cdm.core.rest.v1.ExceptionMapper"/>
+		    <bean id="filterProvider" class="com.tibco.bpm.auth.api.BPMContainerFilter">
+		        <property name="securityService" ref="authSecurityService"></property>
+		    </bean>
+		</jaxrs:providers>
+	</jaxrs:server>
+		
+</blueprint>

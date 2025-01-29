@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <taskdef resource="net/sf/antcontrib/antlib.xml">
+    <classpath>
+      <fileset includes="ant-contrib-1.0b3.jar" dir="${autobuild.dir.builder}"/>
+    </classpath>
+  </taskdef>
+  	
+  <property name="eclipse.nature.build" value="true"/>
+  <var name="official-release-build" unset="true"/>
+  <var name="integration-build" unset="true"/>
+  <var name="dual.build.enable" unset="true"/>
+  <var name="assembly.packaging.enable" unset="true"/>
+  	
+  <property name="autobuild.p2.packaging" value="true"/>
+  	
+	
+  <!-- Each Release Unit should change the project name above and the two property definitions below. -->
+  	
+  <property name="autobuild.repository" value="BPM"/>
+  	
+  <!-- MR39626 CJED 06-MAY-2009 - add autobuild.svn.tags-prefix property
+		                    remove autobuild.svn.tags-suffix property
+		                    and make release-unit and feature properties the same -->
+      
+  <property name="autobuild.svn.tags-suffix" value="/CaseDataManager"/>
+      
+  <var name="feature" value="com.tibco.bpm.cdm.libs.feature.eclipse"/>
+      
+  <var name="release-unit" value="com.tibco.bpm.cdm.libs.feature.eclipse"/>
+      
+  <condition property="reldist.update.site" value="http://reldist.na.tibco.com:${autobuild.spin.port}/reldist/${site.type}" else="http://reldist.na.tibco.com/reldist/${site.type}">
+            
+    <isset property="autobuild.spin.port"/>
+        
+  </condition>
+      
+  <updatesites id="autobuild.workspace.update-sites.list">
+            
+    <updatesite url="${reldist.update.site}"/>
+        
+  </updatesites>
+  	
+  <!-- Optionally import the N2 build overrides file -->
+  	
+  <!-- default to a configuration directory, but can be overriden to common/configuration -->
+  	
+  <property name="autobuild.wbpm.overrides.folder" value="${autobuild.dir.release-unit}/configuration"/>
+  	
+  <import file="${autobuild.wbpm.overrides.folder}/build-overrides.xml" optional="true"/>
+      
+  <!--
+        Copied setting for Common/configuration/build-overrides.xml because dual-build will not pick them up
+    -->
+      
+  <property name="autobuild.obfuscator.style" value="none"/>
+  	
+  <property name="reldist.download.enable" value="true"/>
+  	
+  <property name="javacSource" value="1.8"/>
+      
+  <property name="javacTarget" value="1.8"/>
+      
+	
+  <property name="autobuild.jdk.force-110" value="true"/>
+  	
+  <property name="autobuild.version.eclipse" value="4.7"/>
+      
+  <property name="site.type" value="release"/>
+  
+</project>

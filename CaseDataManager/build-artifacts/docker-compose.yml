@@ -1,0 +1,35 @@
+#
+# Inventory for ACE (AMXBPM Container Edition)
+# This version starts up the ACE microservice and injects the appropriate environment
+# for DB and other attached services.
+#
+version: '2'
+
+services:
+
+ bpm-ace:
+  container_name: bpm-ace
+  image: bpm-docker.emea.tibco.com:443/runtime/containeredition:1.0.dev
+  ports:
+   - "8181:8181"
+   - "5005:5005"
+   - "9010:9010"
+   - "8849:8849"
+  network_mode: bpm-network
+  hostname: bpm-ace
+  logging:
+   driver: json-file
+   options:
+    max-size: 60m
+  env_file:
+   - db-server-ace.env
+   - logging.env
+   - ldap-ace.env
+   - karaf-jvm-opts.env
+   - jetty.env   
+  environment:
+  - KARAF_DEBUG=true
+  - JAVA_DEBUG_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.rmi.port=9010 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false 
+  - JAVA_OPTS=-server -XX:+UseG1GC -XX:SurvivorRatio=128 -XX:MaxTenuringThreshold=0 -XX:+UseTLAB -XX:+CMSClassUnloadingEnabled -Djava.security.egd=file:///dev/urandom
+  
+  restart: unless-stopped

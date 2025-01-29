@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='com.tibco.bpm.cdm.libs.dql' version='1.0.0.202501230455' singleton='false'>
+    <update id='com.tibco.bpm.cdm.libs.dql' range='[0.0.0,1.0.0.202501230455)' severity='0'/>
+    <properties size='6'>
+      <property name='org.eclipse.equinox.p2.name' value='CDM DQL Parser and Validator'/>
+      <property name='org.eclipse.equinox.p2.provider' value='TIBCO'/>
+      <property name='maven-groupId' value='com.tibco.bpm.cdm'/>
+      <property name='maven-artifactId' value='com.tibco.bpm.cdm.libs.dql'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+    <provides size='8'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='com.tibco.bpm.cdm.libs.dql' version='1.0.0.202501230455'/>
+      <provided namespace='osgi.bundle' name='com.tibco.bpm.cdm.libs.dql' version='1.0.0.202501230455'/>
+      <provided namespace='java.package' name='com.tibco.bpm.cdm.libs.dql' version='1.0.0'/>
+      <provided namespace='java.package' name='com.tibco.bpm.cdm.libs.dql.dto' version='1.0.0'/>
+      <provided namespace='java.package' name='com.tibco.bpm.cdm.libs.dql.exception' version='1.0.0'/>
+      <provided namespace='java.package' name='com.tibco.bpm.cdm.libs.dql.model' version='1.0.0'/>
+      <provided namespace='osgi.identity' name='com.tibco.bpm.cdm.libs.dql' version='1.0.0.202501230455'>
+        <properties size='1'>
+          <property name='type' value='osgi.bundle'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='com.tibco.bpm.cdm.libs.dql' version='1.0.0.202501230455'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: com.tibco.bpm.cdm.libs.dql&#xA;Bundle-Version: 1.0.0.202501230455&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

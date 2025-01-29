@@ -1,0 +1,2 @@
+1) See if https://maven.apache.org/resolver-archives/resolver-ant-tasks-LATEST/ can be used to pull down a locally build maven artifact
+2) Add prebuild.xml incorporating the above task

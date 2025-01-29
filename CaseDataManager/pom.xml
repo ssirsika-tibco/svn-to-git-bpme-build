@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.tibco.bpm.cdm</groupId>
+	<artifactId>casedatamanager-bld</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0.svn2git-SNAPSHOT</version>
+	<name>Case Data Manager Micro Service</name>
+	<description>Case Data Manager MicroService implementation</description>
+	
+	<parent>
+		<groupId>com.tibco.bpm</groupId>
+		<artifactId>bpme-root</artifactId>
+		<version>1.0.svn2git-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+
+	<properties>
+		<image.name>bpm-docker.emea.tibco.com:443/runtime/containeredition:1.0.dev</image.name>
+		<svn.base.url>https://emea-swi-svn.emea.tibco.com/svn/WBPM/ace</svn.base.url>
+		<branch>${svn.base.url}/trunk</branch>
+		<base.repository.dir>build-artifacts</base.repository.dir>
+		<auth.kar.dir>${base.repository.dir}/repository/repository/com/tibco/bpm/karaf/ace/com.tibco.bpm.karaf.auth-kar/1.0.0/com.tibco.bpm.karaf.auth-kar-1.0.0</auth.kar.dir>
+	</properties>
+
+	<modules>
+		<module>com.tibco.bpm.cdm.api.feature</module>
+		<module>com.tibco.bpm.cdm.core.feature</module>
+		<module>com.tibco.bpm.cdm.dm.feature</module>
+		<module>com.tibco.bpm.cdm.libs.feature</module>
+		<module>com.tibco.bpm.cdm.test.feature</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<!-- Clear artifacts from 'build-artifacts'   -->
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.4.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${base.repository.dir}/repository</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</fileset>
+						<fileset>
+							<directory>${base.repository.dir}/yy/repository</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</fileset>
+						<fileset>
+							<directory>${base.repository.dir}</directory>
+							<includes>
+								<include>com.tibco.bpm.cdm.kar</include>
+								<include>com.tibco.bpm.se-api.kar</include>
+								<include>yy.kar</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>		
+	</build>
+	
+</project>

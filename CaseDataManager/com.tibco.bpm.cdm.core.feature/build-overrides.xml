@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CDM Core Runtime Overrides">
+
+	<!-- Each Release Unit should change the project name above and the two property definitions below. -->
+	<property name="autobuild.repository" value="BPM"/>
+
+	<!-- MR39626 CJED 06-MAY-2009 - add autobuild.svn.tags-prefix property
+		                    remove autobuild.svn.tags-suffix property
+		                    and make release-unit and feature properties the same -->
+
+    <property name="autobuild.svn.tags-suffix" value="/CaseDataManager"/>
+    <property name="feature" value="com.tibco.bpm.cdm.core.feature" />
+    <property name="release-unit" value="${feature}" />
+
+    <property name="autobuild.obfuscator.style" value="none"/>
+
+    <condition property="reldist.update.site"
+        value="http://reldist.na.tibco.com:${autobuild.spin.port}/reldist/${site.type}"
+        else="http://reldist.na.tibco.com/reldist/${site.type}">
+        <isset property="autobuild.spin.port" />
+    </condition>
+
+    <updatesites id="autobuild.workspace.update-sites.list">
+        <updatesite url="${reldist.update.site}"/>
+    </updatesites>
+
+	<!-- Optionally import the N2 build overrides file -->
+	<!-- default to a configuration directory, but can be overriden to common/configuration -->
+	<property name="autobuild.wbpm.overrides.folder" value="${autobuild.dir.release-unit}/configuration" />
+	<import file="${autobuild.wbpm.overrides.folder}/build-overrides.xml" optional="true"/>
+</project>

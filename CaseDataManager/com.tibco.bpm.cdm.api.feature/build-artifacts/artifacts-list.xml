@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<project name="com.tibco.bpm.cdm.api.feature artifacts">
+<!-- THIS IS A GENERATED FILE.  Any changes you make will be destroyed. -->
+    <property name="feature_com.tibco.bpm.cdm.api.feature" value="1.0.0.DEV-2025-01-24-1137-Sushant" />
+    <property name="plugin_com.tibco.bpm.cdm.api.feature-com.tibco.bpm.cdm.api" value="1.0.0.DEV-2024-12-31-1332-Sushant" />
+</project>

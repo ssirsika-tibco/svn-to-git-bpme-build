@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CDM DQL Parser and Validator
+Bundle-SymbolicName: com.tibco.bpm.cdm.libs.dql
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: TIBCO
+Bundle-ClassPath: .
+Export-Package: com.tibco.bpm.cdm.libs.dql;version="1.0.0",
+ com.tibco.bpm.cdm.libs.dql.dto;version="1.0.0",
+ com.tibco.bpm.cdm.libs.dql.exception;version="1.0.0",
+ com.tibco.bpm.cdm.libs.dql.model;version="1.0.0"
+

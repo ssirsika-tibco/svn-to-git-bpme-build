@@ -1,0 +1,301 @@
+<project name="CDMRoot" xmlns:if="ant:if" xmlns:unless="ant:unless"  default="build" basedir=".">
+    <description>
+		Builds listed CDM Features
+	</description>
+	<import file="${user.home}/tibco-build/user-overrides.xml" optional="false" />
+	<property environment="env"/>
+	<property name="env.BUILDER_HOME" value="${devtools.dir.base}"/>
+	<condition property="builder.isSet" value="true" else="false">
+		<isset property="env.BUILDER_HOME"/>
+	</condition>
+	<echo unless:set="env.BUILDER_HOME">!!!!!ERROR::BUILDER_HOME NOT SET!! Please Set BUILDER_HOME environment variable to point to top-level builder folder containing 'configurations' directory</echo>
+	<property name="tibco.builder" value="${devtools.dir.base}"/>
+	<property name="SE_SRC" value="../ScriptEngine"/>
+	<condition property="SE_SRC.isSet" value="true" else="false">
+        <isset property="env.SE_SRC" />
+    </condition>
+	<condition property="SE_SRC" value="${env.SE_SRC}" else="${basedir}/${SE_SRC}">
+        <isset property="env.SE_SRC" />
+    </condition>
+	<condition property="env.SE_SRC" value="${env.SE_SRC}" else="${SE_SRC}">
+        <isset property="env.SE_SRC" />
+    </condition>
+    <echo unless:set="env.SE_SRC">!!!!!ERROR::SE_SRC NOT SET!! Please Set SE_SRC environment variable to point to folder that contains com.tibco.bpm.se.api.feature </echo>
+	
+	<echo message="**** ******** BUILDER HOME is ${env.BUILDER_HOME} ... ****************"/>
+	<echo message="**** ******** Script engine source  is ${env.SE_SRC} ... ****************"/>
+	
+	<property name="cdm.api.feature" value="${tibco.builder}\candidates\BPM\CaseDataManager\com.tibco.bpm.cdm.api.feature"/>
+	<property name="cdm.core.feature" value="${tibco.builder}\candidates\BPM\CaseDataManager\com.tibco.bpm.cdm.core.feature"/>
+	<property name="cdm.dm.feature" value="${tibco.builder}\candidates\BPM\CaseDataManager\com.tibco.bpm.cdm.dm.feature"/>
+	<property name="cdm.libs.feature" value="${tibco.builder}\candidates\BPM\CaseDataManager\com.tibco.bpm.cdm.libs.feature"/>
+	<property name="cdm.test.feature" value="${tibco.builder}\candidates\BPM\CaseDataManager\com.tibco.bpm.cdm.test.feature"/>
+	<property name="build.dir" value="build-artifacts"/>
+	<property name="repository.dir" value="${build.dir}/repository/repository"/>
+	<property name="yy.dir" value="${build.dir}/yy/repository"/>
+	<property name="se.kar.dir" value="${env.SE_SRC}/kar"/>
+	<property name="cdm.kar.dir" value="${repository.dir}\com\tibco\bpm\karaf\ace\com.tibco.bpm.karaf.cdm-kar\1.0.0\com.tibco.bpm.karaf.cdm-kar-1.0.0"/>
+	<property name="yy.kar.dir" value="${yy.dir}\com\tibco\bpm\karaf\ace\com.tibco.bpm.karaf.yy-kar\1.0.0\com.tibco.bpm.karaf.yy-kar-1.0.0"/>
+	
+
+	
+  <target name="build" description="Builds all CDM Features">
+	<ant inheritAll="false" antfile="build.xml" target="clean" dir="com.tibco.bpm.cdm.dm.feature" />
+	<ant inheritAll="false" antfile="build.xml" target="build" dir="com.tibco.bpm.cdm.dm.feature" />
+	<ant inheritAll="false" antfile="build.xml" target="clean" dir="com.tibco.bpm.cdm.libs.feature" />
+	<ant inheritAll="false" antfile="build.xml" target="build" dir="com.tibco.bpm.cdm.libs.feature" />
+	<ant inheritAll="false" antfile="build.xml" target="clean" dir="com.tibco.bpm.cdm.api.feature" />
+	<ant inheritAll="false" antfile="build.xml" target="build" dir="com.tibco.bpm.cdm.api.feature" />
+	<ant inheritAll="false" antfile="build.xml" target="conf-clean" dir="com.tibco.bpm.cdm.core.feature" />	
+	<ant inheritAll="false" antfile="build.xml" target="clean" dir="com.tibco.bpm.cdm.core.feature" />
+	<ant inheritAll="false" antfile="build.xml" target="build" dir="com.tibco.bpm.cdm.core.feature" />
+	<ant inheritAll="false" antfile="build.xml" target="conf-clean" dir="com.tibco.bpm.cdm.test.feature" />	
+	<ant inheritAll="false" antfile="build.xml" target="clean" dir="com.tibco.bpm.cdm.test.feature" />
+	<ant inheritAll="false" antfile="build.xml" target="build" dir="com.tibco.bpm.cdm.test.feature" />	
+  </target>
+
+  <target name="testng" description="Runs TestNG Tests">
+	<ant inheritAll="false" antfile="build.xml" target="test" dir="com.tibco.bpm.cdm.test.feature/plugins/com.tibco.bpm.cdm.test/resources" />	
+  </target>
+ 
+  <target name="rest" description="Runs Rest Assured Tests">
+	<ant inheritAll="false" antfile="build.xml" target="test" dir="com.tibco.bpm.cdm.test.feature/plugins/com.tibco.bpm.cdm.rest.test/resources" />	
+  </target> 
+  
+
+  <target name="kar" depends="build" description="Builds all CDM features and buids a kar file">
+		<delete file="${repository.dir}/com.tibco.bpm.cdm.kar"/>
+		<delete dir="${repository.dir}"/>
+		<mkdir dir="${repository.dir}"/>
+		<last id="cdm.api.dir">
+			<sort>
+				<date xmlns="antlib:org.apache.tools.ant.types.resources.comparators"/>
+				<resources>
+					<dirset dir="${cdm.api.feature}">
+						<include name="*"/>
+					</dirset>
+				</resources>
+			</sort>
+		</last>
+		<last id="cdm.core.dir">
+			<sort>
+				<date xmlns="antlib:org.apache.tools.ant.types.resources.comparators"/>
+				<resources>
+					<dirset dir="${cdm.core.feature}">
+						<include name="*"/>
+					</dirset>
+				</resources>
+			</sort>
+		</last>
+		<last id="cdm.dm.dir">
+			<sort>
+				<date xmlns="antlib:org.apache.tools.ant.types.resources.comparators"/>
+				<resources>
+					<dirset dir="${cdm.dm.feature}">
+						<include name="*"/>
+					</dirset>
+				</resources>
+			</sort>
+		</last>
+		<last id="cdm.libs.dir">
+			<sort>
+				<date xmlns="antlib:org.apache.tools.ant.types.resources.comparators"/>
+				<resources>
+					<dirset dir="${cdm.libs.feature}">
+						<include name="*"/>
+					</dirset>
+				</resources>
+			</sort>
+		</last>
+		<property name="cdm.api.repodir" value="${repository.dir}\com\tibco\bpm\karaf\ace\com.tibco.bpm.cdm.api\1.0.0"/>
+		<property name="cdm.core.repodir" value="${repository.dir}\com\tibco\bpm\karaf\ace\com.tibco.bpm.cdm.core\1.0.0"/>
+		<property name="cdm.dm.repodir" value="${repository.dir}\com\tibco\bpm\karaf\ace\com.tibco.bpm.cdm.dm\1.0.0"/>
+		<property name="cdm.libs.dql.repodir" value="${repository.dir}\com\tibco\bpm\karaf\ace\com.tibco.bpm.cdm.libs.dql\1.0.0"/>
+
+		<copy todir="${cdm.api.repodir}">
+			<fileset dir="${toString:cdm.api.dir}\jar\release\plugins">
+				<include name="*.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="${cdm.core.repodir}">
+			<fileset dir="${toString:cdm.core.dir}\jar\release\plugins">
+				<include name="*.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="${cdm.libs.dql.repodir}">
+			<fileset dir="${toString:cdm.libs.dir}\jar\release\plugins">
+				<include name="com.tibco.bpm.cdm.libs.dql_1.0.0.*.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="${cdm.dm.repodir}">
+			<fileset dir="${toString:cdm.dm.dir}\jar\release\plugins">
+				<include name="com.tibco.bpm.cdm.dm_1.0.0.*.jar"/>
+			</fileset>
+		</copy>
+
+		<path id="api.jar"> 
+			<fileset dir="${cdm.api.repodir}"> 
+				<include name="*.jar"/> 
+			</fileset>
+		</path>
+		<property name="api.file" refid="api.jar"/>
+		<move  file="${api.file}" tofile="${cdm.api.repodir}\com.tibco.bpm.cdm.api-1.0.0.jar"/>
+		
+		<path id="core.jar"> 
+			<fileset dir="${cdm.core.repodir}"> 
+				<include name="*.jar"/> 
+			</fileset>
+		</path>
+		<property name="core.file" refid="core.jar"/>
+		<move file="${core.file}" tofile="${cdm.core.repodir}\com.tibco.bpm.cdm.core-1.0.0.jar"/>
+		
+		<path id="dm.jar"> 
+			<fileset dir="${cdm.dm.repodir}"> 
+				<include name="*.jar"/> 
+			</fileset>
+		</path>
+		<property name="dm.file" refid="dm.jar"/>
+		<move file="${dm.file}" tofile="${cdm.dm.repodir}\com.tibco.bpm.cdm.dm-1.0.0.jar"/>
+		
+		<path id="libs.dql.jar"> 
+			<fileset dir="${cdm.libs.dql.repodir}"> 
+				<include name="*.jar"/> 
+			</fileset>
+		</path>
+		<property name="libs.dql.file" refid="libs.dql.jar"/>
+		<move file="${libs.dql.file}" tofile="${cdm.libs.dql.repodir}\com.tibco.bpm.cdm.libs.dql-1.0.0.jar"/>
+
+		<package-cdm-kar></package-cdm-kar>
+		<antcall target="yyKar"/>
+	</target>
+	
+	<target name="yyKar" description="Builds YY into a kar file">
+		<delete file="${yy.dir}/yy.kar"/>
+		<delete dir="${yy.dir}"/>
+		<mkdir dir="${yy.dir}"/>
+		<last id="cdm.test.dir">
+			<sort>
+				<date xmlns="antlib:org.apache.tools.ant.types.resources.comparators"/>
+				<resources>
+					<dirset dir="${cdm.test.feature}">
+						<include name="*"/>
+					</dirset>
+				</resources>
+			</sort>
+		</last>
+		<property name="yy.repodir" value="${yy.dir}\com\tibco\bpm\karaf\ace\yy\1.0.0"/>
+		<copy todir="${yy.repodir}">
+			<fileset dir="${toString:cdm.test.dir}\jar\release\plugins">
+				<include name="com.tibco.bpm.cdm.yy_*.jar"/>
+			</fileset>
+		</copy>
+
+		<path id="yy.jar"> 
+			<fileset dir="${yy.repodir}"> 
+				<include name="*.jar"/> 
+			</fileset>
+		</path>
+		<property name="yy.file" refid="yy.jar"/>
+		<move  file="${yy.file}" tofile="${yy.repodir}\yy-1.0.0.jar"/>
+		
+		<package-yy-kar></package-yy-kar>
+	</target>
+
+	<target name="refresh" description="Gets latest V builds of KARs we depend on">
+		<get src="http://uk-n2-hudson1.emea.tibco.com:8282/job/bpm-docker-ace/lastSuccessfulBuild/artifact/misc/com.tibco.bpm.karaf.ace.kar" dest="${build.dir}/com.tibco.bpm.karaf.ace.kar"/>
+		<get src="http://wbpm-master.emea.tibco.com/job/ace-auth-bld/lastSuccessfulBuild/artifact/build-artifacts/com.tibco.bpm.auth.kar" 
+		  dest="${build.dir}/com.tibco.bpm.auth.kar"/>
+		 <!--
+		<get src="http://ariel-dt-docker-2.emea.tibco.com:8080/job/ace-admin-adapter-release/lastSuccessfulBuild/artifact/com.tibco.bpm.karaf.ace.admin.kar" dest=
+		"${build.dir}/com.tibco.bpm.karaf.ace.admin.kar"/>
+		<get src="http://ariel-dt-docker-2.emea.tibco.com:8080/job/ace-admin-adapter-release/lastSuccessfulBuild/artifact/com.tibco.bpm.karaf.ace.adapter.k8s.kar" dest=
+		"${build.dir}/com.tibco.bpm.karaf.ace.adapter.k8s.kar"/>
+		-->
+
+	</target>	
+	  
+	<target name="maven-kar" description="Builds all CDM features using maven and buids a kar file">
+	     <invoke.feature.maven.target.msg message="Building the feature using Maven" target="clean install package -Ptibco"/>
+		 <package-cdm-kar></package-cdm-kar>
+		 <package-yy-kar></package-yy-kar>
+	</target>
+
+	<macrodef name="invoke.feature.maven.target.msg">
+			<attribute name="message"/>
+			<attribute name="target"/>
+			<sequential>
+				<echo>
+	=======================================================================================
+
+	@{message}
+
+	=======================================================================================
+				</echo>
+
+				<exec executable="mvn" failonerror="true" vmlauncher="false">
+					<arg line="@{target}"/>
+					<env key="MAVEN_OPTS" value="-Xmx4096m"/>
+				</exec>
+			</sequential>
+	</macrodef>
+
+	<macrodef name="package-cdm-kar">
+		<sequential>
+			<mkdir dir="${cdm.kar.dir}"/>
+			<echoxml file="${cdm.kar.dir}\features.xml" append="false">
+				<features name="tibco.bpm.template-1.0.0">
+					<feature name="tibco.bpm.cdm" version="1.0.0" description="Case Data Manager Karaf feature for Container Edition (ACE)">
+						<!-- Declare dependencies on other Karaf features -->
+						<feature version="[3,4)">cxf</feature>
+						<feature version="[1,5)">jndi</feature>
+						<feature version="[3,6)">spring</feature>
+						<feature version="[2,3)">fasterxml</feature>
+						<feature version="[1,2)">tibco.bpm.template</feature>
+						<feature version="[1,2)">tibco.bpm.se</feature>
+						<feature version="[1,2)">tibco.bpm.auth</feature>
+						<feature version="[1,2)">tibco-ace-admin-common</feature>
+						<feature version="[1,2)">tibco-ace-admin-provider</feature>
+						
+						<!-- Define our bundles -->
+						<bundle start-level="80">mvn:com.tibco.bpm.karaf.ace/com.tibco.bpm.cdm.api/1.0.0</bundle>
+						<bundle start-level="100">mvn:com.tibco.bpm.karaf.ace/com.tibco.bpm.cdm.core/1.0.0</bundle>
+						<bundle start-level="80">mvn:com.tibco.bpm.karaf.ace/com.tibco.bpm.cdm.dm/1.0.0</bundle>
+						<bundle start-level="80">mvn:com.tibco.bpm.karaf.ace/com.tibco.bpm.cdm.libs.dql/1.0.0</bundle>
+					</feature>
+				</features>
+			</echoxml>
+			<zip destfile="${build.dir}/com.tibco.bpm.cdm.zip" basedir="${build.dir}/repository"/>
+			<move file="${build.dir}/com.tibco.bpm.cdm.zip" tofile="${build.dir}/com.tibco.bpm.cdm.kar"/>
+			<copy file="${se.kar.dir}/com.tibco.bpm.se-api.kar" tofile="${build.dir}/com.tibco.bpm.se-api.kar"/>
+		</sequential>
+	</macrodef>	
+	
+	<macrodef name="package-yy-kar">
+		<sequential>
+			<mkdir dir="${yy.kar.dir}"/>
+			<echoxml file="${yy.kar.dir}\features.xml" append="false">
+				<features name="tibco.bpm.template-1.0.0">
+					<feature name="tibco.bpm.cdm.yy" version="1.0.0" description="YY feature for Container Edition (ACE)">
+						<!-- Declare dependencies on other Karaf features -->
+						<feature version="[3,4)">cxf</feature>
+						<feature version="[1,5)">jndi</feature>
+						<feature version="[3,6)">spring</feature>
+						<feature version="[2,3)">fasterxml</feature>
+						<feature version="[1,2)">tibco.bpm.template</feature>
+						<feature version="[1,2)">tibco.bpm.se</feature>
+						<feature version="[1,2)">tibco.bpm.auth</feature>
+						<feature version="[1,2)">tibco-ace-admin-common</feature>
+						<feature version="[1,2)">tibco-ace-admin-provider</feature>
+						<feature version="[1,2)">tibco.bpm.cdm</feature>
+						
+						<!-- Define our bundles -->
+						<bundle start-level="80">mvn:com.tibco.bpm.karaf.ace/yy/1.0.0</bundle>
+					</feature>
+				</features>
+			</echoxml>
+			<zip destfile="${build.dir}/yy.zip" basedir="${build.dir}/yy"/>
+			<move file="${build.dir}/yy.zip" tofile="${build.dir}/yy.kar"/>
+		</sequential>
+	</macrodef>	
+
+</project>

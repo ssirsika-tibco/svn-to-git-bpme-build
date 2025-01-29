@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tibco.bpm.acecannon.controllers.AdminPropertiesController">
+   <children>
+      <TableView fx:id="tvProperties" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <columns>
+          <TableColumn fx:id="colGroupId" prefWidth="75.0" text="Group Id" />
+          <TableColumn fx:id="colName" prefWidth="200.0" text="Name" />
+          <TableColumn fx:id="colValue" prefWidth="200.0" text="Value" />
+          <TableColumn fx:id="colId" prefWidth="75.0" text="Id" />
+          <TableColumn fx:id="colDescription" prefWidth="75.0" text="Description" />
+          <TableColumn fx:id="colModifiedDate" prefWidth="180.0" text="ModifiedDate" />
+        </columns>
+      </TableView>
+      <HBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Button fx:id="buttonRefresh" mnemonicParsing="false" onMouseClicked="#onButtonRefreshClicked" text="Refresh" />
+            <CheckBox fx:id="cbCDMOnly" mnemonicParsing="false" selected="true" text="CDM-only" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

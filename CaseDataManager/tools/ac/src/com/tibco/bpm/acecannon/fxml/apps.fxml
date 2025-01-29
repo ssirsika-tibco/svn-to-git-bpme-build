@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="377.0" prefWidth="1002.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tibco.bpm.acecannon.controllers.AppsController">
+	<children>
+		<SplitPane fx:id="spVertical" dividerPositions="0.34" orientation="VERTICAL" prefHeight="200.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
+			<items>
+				<VBox>
+					<children>
+						<HBox>
+							<children>
+								<Label text="Deployments">
+									<font>
+										<Font name="System Bold" size="14.0" />
+									</font>
+								</Label>
+							</children>
+							<VBox.margin>
+								<Insets bottom="2.0" left="2.0" top="2.0" />
+							</VBox.margin>
+						</HBox>
+
+						<TableView fx:id="tvDeployments" VBox.vgrow="ALWAYS">
+							<columns>
+								<TableColumn fx:id="colDepApplicationId" prefWidth="180.0" text="Application Id" />
+								<TableColumn fx:id="colDepName" prefWidth="125.0" text="Name" />
+								<TableColumn fx:id="colDepStatus" prefWidth="75.0" text="Status" />
+								<TableColumn fx:id="colDepVersion" prefWidth="160.0" text="Version" />
+								<TableColumn fx:id="colDepId" prefWidth="75.0" text="Id" />
+								<TableColumn fx:id="colDepArtifacts" prefWidth="120.0" text="CDM Artifacts" />
+								<TableColumn fx:id="colDepTimeDeployed" prefWidth="170.0" text="Time Deployed" />
+								<TableColumn fx:id="colDepTimeCreated" prefWidth="170.0" text="Time Created" />
+							</columns>
+						</TableView>
+					</children>
+				</VBox>
+				<SplitPane fx:id="spHorizontal" dividerPositions="0.55" prefHeight="160.0" prefWidth="200.0">
+					<items>
+						<VBox>
+							<children>
+								<HBox alignment="CENTER_LEFT" spacing="5.0">
+									<children>
+										<Label text="Types">
+											<font>
+												<Font name="System Bold" size="14.0" />
+											</font>
+											<HBox.margin>
+												<Insets bottom="2.0" left="2.0" top="2.0" />
+											</HBox.margin>
+										</Label>
+										<Separator orientation="VERTICAL" />
+                     					<Label text="Application Id:" />
+                   						<TextField fx:id="tfApplicationId" onKeyReleased="#onTextKeyReleased" prefWidth="200.0" />
+                    					<Label text="Namespace:" />
+                 						<TextField fx:id="tfNamespace" onKeyReleased="#onTextKeyReleased" />
+									</children>
+									<VBox.margin>
+										<Insets bottom="2.0" left="2.0" top="2.0" />
+									</VBox.margin>
+								</HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <Label text="Major V." />
+                              <TextField fx:id="tfMajorVersion" onKeyReleased="#onTextKeyReleased" prefWidth="30.0" />
+								<Label text="Aspects:" />
+								<TextField fx:id="tfTypeAspects" onKeyReleased="#onTextKeyReleased" text="b,a,sa,s,l,d" />
+								<Label text="Skip:" />
+								<TextField fx:id="tfSkip" onKeyReleased="#onTextKeyReleased" prefWidth="50.0" />
+								<Label text="Top:" />
+								<TextField fx:id="tfTop" onKeyReleased="#onTextKeyReleased" prefWidth="50.0" text="99999" />
+								<CheckBox fx:id="cbCaseOnly" mnemonicParsing="false" text="Case Only" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="2.0" left="2.0" top="2.0" />
+                           </VBox.margin>
+                        </HBox>
+								<TableView fx:id="tvTypes" onMouseClicked="#onTypesTableClicked" VBox.vgrow="ALWAYS">
+									<columns>
+										<TableColumn fx:id="colTypeName" prefWidth="130.0" text="Name" />
+										<TableColumn fx:id="colTypeIsCase" prefWidth="60.0" text="Case?" />
+										<TableColumn fx:id="colTypeNamespace" prefWidth="220.0" text="Namespace" />
+										<TableColumn fx:id="colTypeApplicationId" prefWidth="170.0" text="Application Id" />
+										<TableColumn fx:id="colTypeMajorVersion" prefWidth="110.0" text="Major Version" />
+										<TableColumn fx:id="colTypeLabel" prefWidth="130.0" text="Label" />
+									</columns>
+								</TableView>
+							</children>
+						</VBox>
+						<VBox fx:id="vbTypeDetail" alignment="CENTER">
+							<children>
+								<TabPane fx:id="tpTypeDetail" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+									<tabs>
+										<Tab fx:id="tabAttributes" text="Attributes">
+											<VBox alignment="CENTER" spacing="5.0">
+												<children>
+                                       <TableView fx:id="tvAttributes" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                         <columns>
+                                           <TableColumn fx:id="colAttrName" prefWidth="160.0" text="Name" />
+                                           <TableColumn fx:id="colAttrLabel" prefWidth="160.0" text="Label" />
+                                             <TableColumn fx:id="colAttrType" prefWidth="150.0" text="Type" />
+                                         </columns>
+                                       </TableView>
+												</children>
+												<padding>
+													<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+												</padding>
+											</VBox>
+										</Tab>
+										<Tab fx:id="tabSummaryAttributes" text="Summary Attributes">
+											<content>
+												<VBox alignment="CENTER" spacing="5.0">
+													<children>
+                                       <TableView fx:id="tvSumAttributes" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                         <columns>
+                                           <TableColumn fx:id="colSumAttrName" prefWidth="160.0" text="Name" />
+                                           <TableColumn fx:id="colSumAttrLabel" prefWidth="160.0" text="Label" />
+                                             <TableColumn fx:id="colSumAttrType" prefWidth="150.0" text="Type" />
+                                         </columns>
+                                       </TableView>
+													</children>
+													<padding>
+														<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+													</padding>
+												</VBox>
+											</content>
+										</Tab>
+										<Tab fx:id="tabStates" text="States">
+											<VBox alignment="CENTER" spacing="5.0">
+												<padding>
+													<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+												</padding>
+			                                    <children>
+			                                       <TableView fx:id="tvStates" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+			                                         <columns>
+			                                           <TableColumn fx:id="colStateValue" prefWidth="160.0" text="Value" />
+			                                           <TableColumn fx:id="colStateLabel" minWidth="0.0" prefWidth="160.0" text="Label" />
+			                                             <TableColumn fx:id="colStateTerminal" prefWidth="100.0" text="Terminal?" />
+			                                         </columns>
+			                                       </TableView>
+			                                    </children>
+											</VBox>
+										</Tab>
+										<Tab fx:id="tabLinks" text="Links">
+											<VBox alignment="CENTER" spacing="5.0">
+												<padding>
+													<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+												</padding>
+			                                    <children>
+			                                       <TableView fx:id="tvLinks" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+			                                         <columns>
+			                                           <TableColumn fx:id="colLinkName" prefWidth="140.0" text="Name" />
+			                                           <TableColumn fx:id="colLinkLabel" minWidth="0.0" prefWidth="140.0" text="Label" />
+			                                           <TableColumn fx:id="colLinkIsArray" prefWidth="65.0" text="Array?" />
+			                                           <TableColumn fx:id="colLinkType" prefWidth="150.0" text="Type" />
+			                                         </columns>
+			                                       </TableView>
+			                                    </children>
+											</VBox>
+										</Tab>										
+										<Tab fx:id="tabDependencies" text="Dependencies">
+											<VBox alignment="CENTER" spacing="5.0">
+												<children>
+			                                       <TableView fx:id="tvDependencies" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+			                                         <columns>
+			                                           <TableColumn fx:id="colDepNamespace" prefWidth="180.0" text="Namespace" />
+			                                           <TableColumn fx:id="colDepAppId" minWidth="0.0" prefWidth="180.0" text="Application Id" />
+			                                           <TableColumn fx:id="colDepMajorVersion" prefWidth="140.0" text="Major Version" />
+			                                         </columns>
+			                                       </TableView>
+												</children>
+												<padding>
+													<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+												</padding>
+											</VBox>
+										</Tab>
+										<Tab fx:id="tabJSONTree" text="JSON Tree">
+											<VBox alignment="CENTER" spacing="5.0">
+												<TreeView fx:id="tvTypeJSON" VBox.vgrow="ALWAYS" />
+												<padding>
+													<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+												</padding>
+											</VBox>										
+										</Tab>
+										<Tab fx:id="tabJSONRaw" text="JSON Raw">
+											<VBox alignment="CENTER" spacing="5.0">
+												<TextArea fx:id="taJSONRaw" />
+												<padding>
+													<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+												</padding>
+											</VBox>										
+											<content>
+												<TextArea fx:id="taJSONRaw" />
+											</content>
+										</Tab>
+									</tabs>
+								</TabPane>
+							</children>
+						</VBox>
+					</items>
+				</SplitPane>
+			</items>
+		</SplitPane>
+		<HBox alignment="CENTER_LEFT" spacing="5.0">
+			<children>
+				<Button mnemonicParsing="false" onMouseClicked="#onButtonRefreshClicked" text="Refresh" />
+				<Button fx:id="buttonDeployFolder" mnemonicParsing="false" onMouseClicked="#onDeployFolderClicked" text="Deploy Folder" />
+				<Button fx:id="buttonDeployZip" mnemonicParsing="false" onMouseClicked="#onDeployZipClicked" text="Deploy Zip" />
+				<CheckBox fx:id="cbValidate" mnemonicParsing="false" text="Validate " />
+				<Button fx:id="buttonUndeploy" disable="true" mnemonicParsing="false" onMouseClicked="#onButtonUndeployClicked" text="Undeploy" />
+				<Button fx:id="buttonForceUndeploy" disable="true" mnemonicParsing="false" onMouseClicked="#onButtonForceUndeployClicked" text="Force Undeploy" />
+				<Button fx:id="buttonViewModel" disable="true" mnemonicParsing="false" onMouseClicked="#onButtonViewModel" text="View model from database" />
+				<Button fx:id="buttonCases" disable="true" mnemonicParsing="false" onMouseClicked="#onButtonCasesClicked" text="View Cases" />
+				<Button fx:id="buttonCreateCases" disable="true" mnemonicParsing="false" onMouseClicked="#onButtonCreateCasesClicked" text="Create Cases (auto)" />
+				<Button fx:id="buttonCreateCasesManual" disable="true" mnemonicParsing="false" onMouseClicked="#onButtonCreateCasesManualClicked" text="Create Cases (manual)" />
+
+			</children>
+			<padding>
+				<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+			</padding>
+			<VBox.margin>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</VBox.margin>
+		</HBox>
+	</children>
+</VBox>

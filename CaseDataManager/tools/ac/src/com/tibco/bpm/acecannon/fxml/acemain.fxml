@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" spacing="3.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tibco.bpm.acecannon.MainController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="Tools">
+            <items>
+              <MenuItem fx:id="mnuToolsAdminProperties" mnemonicParsing="false" onAction="#onMnuToolsAdminPropertiesAction" text="Admin Properties" />
+              <MenuItem fx:id="mnuToolsApplications" mnemonicParsing="false" onAction="#onMnuToolsApplicationsAction" text="Applications" />
+              <MenuItem fx:id="mnuToolsDockerContainers" mnemonicParsing="false" onAction="#onMnuToolsDockerContainersAction" text="Docker Containers" />
+              <MenuItem fx:id="mnuToolsHealth" mnemonicParsing="false" onAction="#onMnuToolsHealthAction" text="Health" />
+              <MenuItem fx:id="mnuToolsJobQueue" mnemonicParsing="false" onAction="#onMnuToolsJobQueueAction" text="Job Queue" />
+              <Menu mnemonicParsing="false" text="YY">
+                <items>
+                  <MenuItem fx:id="mnuToolsYYCLNs" mnemonicParsing="false" onAction="#onMnuToolsYYCLNsAction"  text="Case Lifecycle Notifications" />
+                </items>
+              </Menu>
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+         <children>
+            <ImageView fx:id="ivImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </VBox>
+      <Separator prefWidth="200.0" />
+      <HBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Label minWidth="70.0" text="Profile:" />
+            <ChoiceBox fx:id="cbProfile" prefWidth="500.0" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

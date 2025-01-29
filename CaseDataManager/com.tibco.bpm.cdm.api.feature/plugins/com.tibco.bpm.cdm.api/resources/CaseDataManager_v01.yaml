@@ -1,0 +1,980 @@
+  swagger: '2.0'
+  info:
+    title: Case Data Management Service
+    description: |
+        The TIBCO(R) BPM Enterprise Case Data Management Service manages the following resources:
+        
+        * __Types__: A Type contains the essential data definition of a TIBCO BPM Enterprise application - that is, the data fields, data types and states which are created by an application designer when they create an application in TIBCO Business Studio(TM) - BPM Edition. There are two Types:
+        
+          * __Case__: A Case Type contains the definition of:
+              * the top-level data fields used by the application. These data fields (referred to hereafter as 'attributes' of the Case) can be either simple types (such as strings or dates), or custom data types (that group together sets of existing data fields to suit the application's purpose). 
+              * the states used by the application.
+          * __Structured__: A Structured Type contains the definition of a custom data type used by the application, which also has fields ('attributes').
+      
+        * __Cases__: A Case is a particular instance of a Case Type. A Case contains the particular values of the data fields and states for that Case as it progresses from creation to completion.
+    termsOfService: ../../app-cdn/public/legal/end-user-license-agreement.pdf
+    contact:
+      name: TIBCO Software Inc
+      url: http://www.tibco.com
+      email: support@tibco.com
+    license:
+      name: TIBCO Software Inc
+      url: http://www.tibco.com
+    version: "1.0.0"
+  schemes:
+    [http, https]
+  basePath: /bpm/case/v1
+  consumes:
+    - application/json
+  produces:
+    - application/json
+  tags:
+    - name: Cases
+      description: Methods on Cases
+    - name: Links
+      description: Methods on Case Links
+    - name: Types
+      description: Methods on Types
+  paths:
+    /cases:
+      post:
+        summary: Creates one or more Cases of a specific Case Type.
+        description: ""
+        tags: 
+          - Cases
+        parameters:
+          - in: body
+            name: body
+            schema:
+              $ref: '#/definitions/CasesPostRequestBody'
+        responses:
+          '200':
+            description: | 
+              OK - Returns the Case Reference(s) of the newly created Case(s), in the same order as specified in the request.
+            schema:
+              $ref: '#/definitions/CasesPostResponseBody'
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s).
+            schema:
+              $ref: '#/definitions/Error'              
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+      get:
+        summary: Returns all Cases that match the specified query parameters.
+        description: |
+          The following restrictions apply on combining parameters:
+          
+          * `$filter` and `$top` are required _unless_ `$count` is used. If `$count` is used, no other parameters can be used.
+          
+          * When `$filter` contains `caseReference`, other `$filter` expressions are not allowed and neither are `$skip`, `$top`, `$count`, `$search` or `$dql`.
+          
+          * When `$dql` is used:
+          
+            * `$search` cannot be used.
+            
+            * The `cid`, `caseState` and `modificationTimestamp` operands cannot be used in a `$filter` expression.
+                  
+          Cases are returned in descending order of `modificationTimestamp` (most recently modified first).
+        tags:
+          - Cases
+        parameters:
+          - $ref: '#/parameters/filterCases'
+          - $ref: "#/parameters/search"
+          - $ref: "#/parameters/dql"
+          - $ref: '#/parameters/selectCases'
+          - $ref: '#/parameters/skip'
+          - $ref: '#/parameters/top'
+          - in: query
+            description: |
+              If set to `TRUE`, returns the number of Cases in the result, rather than the Cases themselves.
+            name: $count
+            type: boolean
+        responses:
+          '200':
+            description: | 
+              OK - Returns either:
+              
+              * the Cases matching the specified criteria (if `$count` was not used), in descending order of `modificationTimestamp`, or
+              * the number of Cases matching the specified criteria (if `$count` was used)
+            schema:
+              $ref: '#/definitions/CasesGetResponseBody'
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s).
+            schema:
+              $ref: '#/definitions/Error'
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+      put:
+        summary: Updates one or more Cases of a specific Case Type.
+        description: |
+          Note that:
+          
+          * An update increments the `version` portion of the `caseReference` for each updated Case.
+          
+          * An update will fail if the `version` portion of the specified `caseReference` does not match the currently stored version. (This implies that the Case has been changed by another call.) If this happens, a `400 Bad request` error is  returned, with the `CDM_REFERENCE_VERSION_MISMATCH` error code.
+          
+          * An update of multiple Cases is an atomic operation - if a single update fails, all fail.
+        tags:
+          - Cases
+        parameters:
+          - in: body
+            name: body
+            schema:
+              $ref: '#/definitions/CasesPutRequestBody'
+        responses:
+          '200':
+            description: | 
+              OK - Returns the Case Reference(s) of the updated Case(s), in the same order as specified in the request.
+            schema:
+              $ref: '#/definitions/CasesPutResponseBody'
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s). See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+      delete:
+        summary: Deletes all Cases that match the specified query parameters.
+        description: |
+          Links between deleted Cases and other Cases are implicitly removed.
+        tags:
+          - Cases
+        parameters:
+          - $ref: '#/parameters/filterCasesDelete'
+        responses:
+          '200':
+            description: | 
+              OK - Returns the number of cases that have been deleted.
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s). See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'               
+    /cases/{caseReference}:
+      get:
+        summary: Returns the information about a particular Case that matches the specified query parameters.
+        tags:
+          - Cases
+        parameters:
+          - $ref: '#/parameters/caseReference'
+          - $ref: '#/parameters/selectCases'
+        responses:
+          '200':
+            description: | 
+              OK - Returns the requested information for the specified Case.
+            schema:
+              $ref: '#/definitions/CasesRefGetResponseBody'
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s). See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'     
+      put:
+        summary: Updates a particular Case.
+        description: |
+          An update increments the `version` portion of the `caseReference` for the updated Case.
+          
+          An update will fail if  the `version` portion of the specified `caseReference` does not match the currently stored version. (This implies that the Case has been changed by another call.) If this happens, a `400 Bad request` error is  returned, with the `CDM_CASE_VERSION_MISMATCH` error code.
+        tags: 
+          - Cases
+        parameters:
+          - $ref: '#/parameters/caseReference'
+          - in: body
+            name: body
+            schema:
+              $ref: '#/definitions/CasesPutRefRequestBody'
+            description: |
+              The updated Case data.
+        responses:
+          '200':
+            description: | 
+              OK - Returns the Case Reference of the updated Case.
+            schema:
+              type: string
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s). See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+      delete:
+        summary: Deletes a particular Case.
+        description: |
+          A deletion will fail if  the `version` portion of the specified `caseReference` does not match the currently stored version. (This implies that the Case has been changed by another call.) If this happens, a `400 Bad request` error is  returned, with the `CDM_CASE_VERSION_MISMATCH` error code.
+        tags:
+          - Cases
+        parameters:
+          - $ref: '#/parameters/caseReference'
+        responses:
+          '200':
+            description: | 
+              OK - Returns the number of cases that have been deleted (in this case, 1).
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s). See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'                
+    /cases/{caseReference}/links:
+      post:
+        summary: Creates one or more new Links to other Cases from a particular Case.
+        description: |
+          The `caseReference` path parameter identifies the source Case from which Links are to be created.
+          
+          The `body` contains an array of new Links to other Cases, each including the Link name and target Case Reference.
+          
+          Note: This method is not version-aware, so ignores the `version` portion of each specified `caseReference`.
+        tags:
+          - Links
+        parameters:
+          - $ref: '#/parameters/caseReference'
+          - in: body
+            name: body
+            schema:
+              $ref: '#/definitions/LinksPostRequestBody'          
+        responses:
+          '200':
+            description: | 
+              OK - Returns the number of Links that have been created.
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s). See the error details for more information
+            schema:
+              $ref: '#/definitions/Error'              
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'                             
+      get:
+        summary: Returns Links that match the specified query parameters from a particular Case.
+        description:
+          The `caseReference` path parameter identifies the source Case for which Links are to be returned.
+          
+          The `$dql` query parameter can be used to limit results to only cases that match specific criteria. However, `$dql` can only be used if `$filter` is also specified (which ensures that all returned Cases are of the same Case Type).
+        tags:
+          - Links
+        parameters:
+          - $ref: '#/parameters/caseReference'
+          - $ref: '#/parameters/filterLinks'
+          - $ref: '#/parameters/dql'
+          - $ref: '#/parameters/skip'
+          - $ref: '#/parameters/top'
+        responses:
+          '200':
+            description: |
+              OK - Returns the Link name and Case Reference of each linked Case that matches the specified criteria.
+            schema:
+              type: array
+              items:
+                $ref: '#/definitions/Link'
+            examples:  
+              application/json:    
+               [{"name": "addresses","caseReference": "com.example.ordermodel.Address-1-13231-0"},
+               {"name": "addresses","caseReference": "com.example.ordermodel.Address-1-88891-0"}, {"name": "privacyAgreement","caseReference": "com.example.ordermodel.PrivacyAgreement-1-77661-0"}]
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s). See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'    
+      delete:
+        summary: Deletes Links that match the specified query parameters from a particular Case.
+        tags:
+          - Links
+        parameters:
+          - $ref: '#/parameters/caseReference'
+          - $ref: '#/parameters/filterLinksDelete'
+        responses:
+          '200':
+            description: OK - Returns the number of Links that have been deleted.
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s). See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+    /types:
+      get:
+        summary: Returns all Types that match the specified query parameters.
+        description: |
+          Types are sorted in order by `applicationId`, `applicationMajorVersion`, `namespace`, `name`.
+        tags:
+          - Types
+        parameters:
+          - $ref: '#/parameters/filterTypes'
+          - $ref: '#/parameters/selectTypes'
+          - $ref: '#/parameters/skip'
+          - $ref: '#/parameters/top'
+        responses:
+          '200':
+            description: | 
+              OK - Returns the Types matching the specified criteria.
+            schema:
+              $ref: '#/definitions/TypesGetResponseBody'
+          '400':
+            description: |
+              Bad request - The specified request was invalid. See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'
+          '403':
+            description: Forbidden - The logged-in user is not authenticated, or does not have access to the requested resource(s). See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'              
+          '500':
+            description: |
+              Unexpected error - See the error details for more information.
+            schema:
+              $ref: '#/definitions/Error'               
+  ############
+  # Parameters 
+  ############
+  parameters:    
+    filterCases:
+      in: query
+      name: $filter
+      description: |
+        A filter expression that defines the Cases to be returned. Two scenarios are supported, each requiring a different format for the expression:
+            
+        1. To obtain a specific set of Cases by Case Reference. In this case, the expression must contain the following operand:
+              
+           * __caseReference__ (required): A comma-separated list of Case references for which Cases should be returned. (Any Case reference that no longer exists, because the Case has been deleted, is simply ignored.)
+              
+             Supported functions: `in`
+                   
+           For example:
+                 
+               $filter=caseReference in('300002-x.policycorporation.Policy-1-0')
+                 
+        2. To obtain Cases of a specific Case Type. In this case, the expression must contain both of the following operands:
+              
+           * __caseType__ (required): The identifier of the specific Case Type for which Cases should be returned.
+              
+             Supported operators: `eq`
+                 
+           * __applicationMajorVersion__ (required): The major version of the Application in which the Case Type is defined.
+        
+             Supported operators: `eq`
+                   
+           The expression can also contain any combination of the following operands:
+        
+           * __cid__ (optional): The name of a Case Identifier (an attribute of the specified Case Type) for which Cases should be returned.
+              
+             Supported operators: `eq`
+               
+           * __caseState__ (optional): The name of a state (belonging to the specified Case Type) for which Cases should be returned.
+              
+             Supported operators: `eq`
+        
+           * __modificationTimestamp__ (optional): The date/time at or before which the Cases to be returned were last modified. (This must be specified as an ISO-8601 expression. It can be partially specified from the left, but must include a time-zone.)
+           
+             Supported operators: `le`
+             
+           * __isInTerminalState__ (optional): If used, this must be set to `FALSE`. Using this option includes only active cases (those in a non-terminal state). 
+           
+             Supported operators: `eq`
+             
+           Supported keywords: `and`
+             
+           For example:
+                 
+               $filter=caseType eq 'x.exampleorg.Policy' and applicationMajorVersion eq 1 and caseState eq 'CANCELLED' and isInTerminalState eq FALSE
+      type: string
+    filterCasesDelete:
+      in: query
+      name: $filter
+      description: |
+        A filter expression that defines the Cases to be deleted. The expression must contain all of the following operands:
+              
+           * __caseType__ (required): The identifier of the specific Case Type from which Cases should be deleted, in the form {namespace}.{caseTypeName}. For example:
+            
+                  com.example.ordermodel.Order
+              
+             Supported operators: `eq`
+                 
+           * __applicationMajorVersion__ (required): The major version of the Application in which the Case Type is defined.
+           
+             Supported operators: `eq`
+                   
+           * __caseState__ (required): The specific state (as defined in the Case Type) for which Cases should be deleted.
+              
+             Supported operators: `eq`
+          
+           * __modificationTimestamp__ (required): The date/time at or before which the Cases to be deleted were last modified. (This must be specified as an ISO-8601 expression. It can be partially specified from the left, but must include a time-zone.)
+           
+             Supported operators: `le`         
+             
+           The expression can also contain the following operand:
+         
+           * __isReferencedByProcess__ (optional): If used, this must be set to 'FALSE'. Using this option excludes any Cases that are currently referenced by a Process Instance from the filter results, so that these Cases are not deleted.  
+              
+             Supported operators: `eq`
+                          
+           Supported keywords: `and`
+             
+           For example:
+                 
+               $filter=caseType eq 'x.exampleorg.Policy' and applicationMajorVersion eq 1 and caseState eq 'CANCELLED' and modificationTimestamp le 2019-07-23T04:42:12.147Z and isReferencedByProcess eq 'FALSE'
+      type: string
+    filterLinks:
+      in: query
+      name: $filter
+      description: |
+           A filter expression that defines what type of Link should be returned. The expression can contain (only) the following operand:
+         
+           * __name__: The name of a Link, as defined in the Case Type of a target Case (or Cases).
+              
+             Supported operators: `eq`
+                          
+           For example:
+                 
+               $filter=name eq 'policies'
+      type: string
+    filterLinksDelete:
+      in: query
+      name: $filter
+      description: |
+        A filter expression that defines the Links to be deleted. The expression can contain the following operands:
+        
+           * __name__ (optional): The name of a Link, as defined in the Case Type of a target Case (or Cases).
+              
+             Supported operators: `eq`
+           
+           * __targetCaseReference__ (optional): The Case Reference of a target Case for this Link, in the form {id}-{namespace}.{caseTypeName}-{applicationMajorVersion}-{version}. 
+                       
+             Supported operators: `eq`
+             Supported functions: `in`
+             
+             NOTE: `targetCaseReference` can only be used when `name` is also used.
+             
+           Supported keywords: `and`
+             
+           For example:
+                 
+               $filter=name eq 'policies' and targetCaseReference in('3-org.policycorporation.Policy-1-0', '4-org.policycorporation.Policy-1-0')
+      type: string    
+    selectCases:
+      in: query
+      name: $select
+      description: |
+        A comma-separated list of identifiers defining the attribute(s) to be returned for each Case. If `$select` is not specified, all attributes are returned.
+                
+          * __caseReference__ (or __cr__): Returns the Case Reference.
+                  
+          * __casedata__ (or __c__): Returns the current value of all Case attributes
+                  
+          * __summary__ (or __s__): Returns the current values of those Case attributes marked as summary attributes.
+                  
+          * __metadata__ (or __m__): Returns the metadata for the Case.
+                            
+          For example:
+                
+          * The following string returns the Case Reference and summary attributes:
+                 
+                $select=caseReference,summary
+                  
+          * The following string returns the Case summary and metadata:
+                
+                $select=s,m
+      required: false
+      type: string
+    caseReference:
+      in: path
+      name: caseReference
+      description: |
+        The Case Reference of the required Case, in the form `{id}-{namespace}.{caseTypeName}-{applicationMajorVersion}-{version}`. For example:
+        
+              101-com.example.ordermodel.Order-1-0
+      required: true
+      type: string    
+    targetCaseReference:
+      in: path
+      name: targetCaseReference
+      description: |
+        The Case Reference of the required Case, in the form `{id}-{namespace}.{case type name}-{application major version}-{version}` For example:
+        
+              4534564-com.example.ordermodel.Address-1-0
+      required: true
+      type: string    
+    linkName:
+      in: path
+      name: linkName
+      description: |
+        The name of the Link defined in the model for the Case Type.
+      required: true
+      type: string
+    selectTypes:
+      in: query
+      name: $select
+      description: |
+        A comma-separated list of identifiers defining the properties to be returned for each Type. If $select is not specified, all properties are returned.
+                
+          * __basic__ (or  __b__): Returns basic properties of the Type - `name`, `label`, `isCase`, `namespace`, `applicationId` and `applicationMajorVersion`. (Note that `isCase` is not returned for a Structured Type.)
+                  
+          * __attributes__ (or __a__): Returns details of all attributes defined in the Type. 
+                  
+          * __summaryAttributes__ (or __sa__): Returns details of attributes that are included in the Case summary for a Case of this Type. (`summaryAttributes` are not defined for a Structured Type, so no data is returned.)
+                  
+          * __states__ (or __s__): Returns details of all states defined in the Case Type. (`states` are not defined for a Structured Type, so no data is returned.)
+                  
+          * __links__ (or __l__): Returns details of all links defined in the Case Type. (`links` are not defined for a Structured Type, so no data is returned.)
+          
+          * __dependencies__ (or __d__): Returns details of all data models in other Applications on which this Type has a dependency.
+                  
+        For example, the following string returns basic and states properties:
+        
+              $select=basic,s
+      required: false
+      type: string
+    filterTypes:
+      in: query
+      name: $filter
+      description: |
+        A filter expression that defines the Types to be returned. The expression can contain the following operands:
+              
+           * __isCase__ (optional): Defines whether to return only Case Types (`TRUE`) or Structured Types (`FALSE`). Note: Case Types have the attribute `isCase=true`.
+             
+           * __namespace__ (optional): The major version of the Application in which the Case Type is defined.
+             
+           * __applicationId__ (optional): The unique identifier of the Application in which the Case Type is defined.
+           
+           * __applicationMajorVersion__ (optional): The major version of the Application in which the Case Type is defined.
+           
+           Supported operators: `eq`
+           Supported keywords: `and`
+             
+           For example:
+                 
+               $filter=isCase eq TRUE and namespace eq 'com.example.ordermodel'
+      type: string
+    search:
+      in: query
+      name: $search
+      description: |
+        A search string that limits the results to only those Cases where the Case data contains the specified string. 
+        
+        Note: Only attributes that are defined as `Searchable` are searched.
+      type: string
+    dql:
+      in: query
+      name: $dql
+      description: |
+        A Data Query Language (DQL) query that limits the results to only those Cases that match the specified query. The query must contain one or more expressions (separated by ` and `) of the form:
+        
+             {attributeName} = {value}
+          
+        Value should be enclosed in single quotes when it is of type Text. (Escape single quote characters with a backslash.) For example:
+        
+              name = 'Bob' and height = 1.8 and dateOfBirth = 2019-03-18 and timeOfBirth = 14:30
+              
+              name = 'Henry' and isAdult = true and alias = null
+      type: string
+    skip:
+      in: query
+      name: $skip
+      description: |
+        The number of items to exclude from the results list, counting from the beginning of the list. The value must be 0 or greater. For example, `$skip=80` results in the first 80 items in the results list being ignored. Subsequent items are returned, starting with the 81st item in the list. 
+      type: integer
+    top:
+      in: query
+      name: $top
+      description: |
+        The maximum number of items to be returned from the results list (with the first item determined by the value of the `$skip` parameter). For example, `$top=20` returns 20 items from the results list, or all the results if the list contains 20 or fewer items.
+      type: integer
+  ######################################
+  #Definitions
+  #######################################
+  definitions:
+    CasesRefGetResponseBody:
+      $ref: "#/definitions/CaseInfo"
+    CasesGetResponseBody:
+      type: array
+      items:
+        $ref: "#/definitions/CaseInfo"
+    CaseInfo:
+      properties:
+        caseReference:
+          description: |
+            The Case Reference of the Case, in the form `{id}-{namespace}.{caseTypeName}-{applicationMajorVersion}-{version}`. For example:
+        
+                  101-com.example.ordermodel.Order-1-0
+          type: string
+        casedata:
+          description: The JSON Case data, serialized to a string.
+          type: string
+        summary:
+          description: The JSON Case summary, serialized to a string.
+          type: string
+        metadata:
+          $ref: '#/definitions/CaseMetadata'
+    CaseMetadata:
+      properties:
+        createdBy:
+          description: The GUID for the user that created the Case.
+          type: string
+        creationTimestamp:
+          description: The date/time at which the Case was created.
+          type: string
+        modifiedBy:
+          description: The GUID for the user that last modified the Case.
+          type: string
+        modificationTimestamp:
+          description: The date/time at which the Case was last modified.
+          type: string
+    CasesPostRequestBody:
+      required: ["caseType", "applicationMajorVersion", "casedata"]
+      properties:
+        caseType:
+          type: string
+          description: |
+            The Case Type, in the form {namespace}.{caseTypeName}. For example:
+            
+                  com.example.ordermodel.Order
+        applicationMajorVersion:
+          type: integer
+          description: |
+            The major version of the Application in which the Case Type is defined.
+        casedata:
+          description: The JSON Case data, serialized to a string.
+          type: array
+          items:
+            type: string
+    CasesPostResponseBody:
+      type: array
+      description: The JSON Case data, serialized to a string.
+      items: 
+        type: string
+    CasesPutRequestBody:
+      type: array
+      items:
+        $ref: "#/definitions/CasesPutRequestBodyItem"
+    CasesPutRequestBodyItem:
+      required: ["caseReference", "casedata"]
+      properties:
+        caseReference:
+          type: string
+          description: |
+            The Case Reference of the Case to be updated, in the form {id}-{namespace}.{caseTypeName}-{applicationMajorVersion}-{version}. For example:
+            
+                  101-com.example.ordermodel-Order-1-7
+        casedata:
+          description: The JSON Case data, serialized to a string.
+          type: string
+    CasesPutResponseBody:
+      type: array
+      items:
+        type: string
+    CasesPutRefRequestBody:
+      required: ["casedata"]
+      properties:
+        casedata:
+          description: The JSON Case data, serialized to a string.
+          type: string
+    LinksPostRequestBody:
+      type: array
+      items:
+        $ref: "#/definitions/Link"
+    Link:
+      required: ["name", "caseReference"]
+      properties:
+        name:
+          type: string
+          description: The name of the Link (as defined in the Case Type of the target Case).
+        caseReference:
+          type: string
+          description: The Case Reference of the target Case for this Link, in the form {id}-{namespace}.{caseTypeName}-{applicationMajorVersion}-{version}. 
+    TypesGetResponseBody:
+      type: array
+      items: 
+        $ref: "#/definitions/TypeInfo"
+    TypeInfo:
+      properties:
+        name:
+          description: The name of the Type.
+          type: string
+        label:
+          description: The label for the Type.
+          type: string
+        isCase:
+          description: Either true for a Case Type, or false for a Structured Type.
+          type: boolean
+        namespace:
+          description: The namespace in which the Type is defined.
+          type: string
+        applicationId:
+          description: The unique identifier of the application in which the Type is defined.
+          type: string
+        applicationMajorVersion:
+          description: The major version of the application in which the Type is defined.
+          type: integer
+        dependencies:
+          description: |
+            Descriptions of data models in other Applications on which this Type depends. 
+          type: array
+          items:
+            $ref: "#/definitions/TypeInfoDependency"
+        attributes:
+          type: array
+          description: |
+            The definitions of all attributes defined in the Type.
+          items:
+            $ref: '#/definitions/TypeInfoAttribute'
+        summaryAttributes:
+          type: array
+          description: |
+            The definitions of all attributes that are included in the Case summary for the Type.
+          items:
+            $ref: '#/definitions/TypeInfoAttribute'
+        states:
+          description: The definitions of all states defined in the Type.
+          type: array
+          items:
+            $ref: '#/definitions/TypeInfoState'
+        links:
+          type: array
+          description: |
+            The definition of all Links defined for the Type.
+          items:
+            $ref: '#/definitions/TypeInfoLink'
+    TypeInfoAttribute:
+      description: |
+        Description of the attributes of a Case Type or Structured Type. 
+      properties:
+        name:
+          type: string
+          description: |
+            The name of the attribute.
+        label:
+          type: string
+          description: |
+            The label for the attribute.
+        type:
+          type: string
+          description: | 
+            If the attribute refers to:
+            
+            * a Structured Type: The name of that Type (fully qualified if it resides in a different namespace). In this case, 'isStructuredType=true' will also be set.
+            
+            * a Case Type: A base type name - for example, 'Text' or 'Number'.
+        isStructuredType:
+          type: boolean
+          description: |
+            If true, this indicates that the value for 'type' is the name of a Structured Type.
+        isIdentifier:
+          description: |
+            True if the attribute is the Type's designated 'identifier' attribute.
+          type: boolean
+        isAutoIdentifier:
+          description: |
+            True if the containing Type is configured to automatically generate Case identifiers. Note: In this case, this attribute should not be supplied when creating a Case.
+          type: boolean
+        isState:
+          description: |
+            True if the attribute is the Type's designated 'state' attribute.
+          type: boolean
+        isArray:
+          description: |
+            True if the attribute is an array.
+          type: boolean
+        isMandatory: 
+          description: |
+            True if the attribute must be populated.
+          type: boolean
+        isSearchable:
+          description: |
+            True if the attribute is searchable.
+          type: boolean
+        isSummary:
+          description: |
+            True if the attribute forms part of the Case summary.
+          type: boolean
+        constraints:
+          $ref: '#/definitions/TypeInfoAttributeConstraints'
+    TypeInfoDependency:
+      properties:
+        namespace:
+          description: |
+            The namespace of the data model in another Application.
+          type: string
+        applicationId:
+          description: |
+            The unique identifier of the other Application.
+          type: string
+        applicationMajorVersion:
+            description: |
+              The major version of the other Application.
+            type: integer
+    TypeInfoAttributeConstraints:
+      description: |
+        Descriptions of constraints on the permitted values for the attribute.
+      properties:
+        length:
+          type: integer
+          description: |
+            The maximum permitted length (only applicable to attributes of the 'Text' and 'FixedPointNumber' base types).
+        minValue:
+          type: string
+          description: |
+            The minimum value allowed for the attribute (only applicable to attributes of the 'Number' and 'FixedPointNumber' base types).
+        minValueInclusive:
+          type: boolean
+          description: |
+            If true, then the value specified in 'minValue' is inclusive. (If false or not set, the value is exclusive).
+        maxValue:
+          type: string
+          description: |
+            The maximum value allowed for the attribute (only applicable to attributes of the 'Number' and 'FixedPointNumber' base types).
+        maxValueInclusive:
+          type: boolean
+          description: |
+            If true, then the value specified in 'maxValue' is inclusive. (If false or not set, the value is exclusive).
+        decimalPlaces:
+          type: integer
+          description: |
+            The maximum number of decimal places permitted (only applicable to attributes of the 'FixedPointNumber' base type)
+    TypeInfoState:
+      description: |
+        Description of a Case Type's states. 
+      properties:
+        label:
+          type: string
+          description: |
+            The label for the state.
+        value:
+          type: string     
+          description: |
+            The value for the state (as it appears within casedata).
+        isTerminal:
+          description: |
+            True if the state is a 'terminal' state (one in which a Case is no longer considered active).
+          type: boolean
+    TypeInfoLink:
+      description: |
+        Description of a Case Type's links.
+      properties:
+        name:
+          type: string
+          description: |
+            The name of the Link.
+        label:
+          type: string
+          description: |
+            The label for the Link.
+        type:
+          type: string
+          description: | 
+            The name of the target Case Type.
+        isArray:
+          type: boolean
+          description: |
+            True if the Link is allowed multiple target Cases.
+    Error:
+      description: |
+        Provides details when an error occurs
+      type: object
+      properties:
+        errorMsg:
+          description: Verbose error message
+          type: string
+        errorCode:
+          description: |
+            The following are the possible error codes (note that the description shown is not part of the error code):
+            - CDM_CASE_VERSION_MISMATCH - The Case exists, but cannot be updated or deleted because the `version` part of the specified `caseReference` does not match the version held in the database.
+            - CDM_PERMISSIONS_NO_SYSTEM_ACTION - The Case cannot be deleted because the calling User does not have the required system actions.
+            - CDM_REFERENCE_VERSION_MISMATCH - The Case cannot be updated because the `version` part of the specified `caseReference` does not match the version held in the database.
+          type: string
+        stackTrace:
+          description: Added if available
+          type: string
+        contextAttributes:
+          description: Error Attributes
+          type: array
+          items:
+            $ref: '#/definitions/ContextAttribute'
+    ContextAttribute:
+      description: |
+        A name/value pair (used within `Error`) providing contextual information when an error occurs.
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+  

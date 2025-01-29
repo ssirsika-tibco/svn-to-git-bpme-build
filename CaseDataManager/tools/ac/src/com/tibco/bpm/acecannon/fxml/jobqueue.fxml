@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="2.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tibco.bpm.acecannon.controllers.JobQueueController">
+   <children>
+      <TableView fx:id="tvJobs" prefHeight="200.0" prefWidth="3221.0" VBox.vgrow="ALWAYS">
+        <columns>
+          <TableColumn fx:id="tcMessageId" prefWidth="93.00003051757812" text="Message Id" />
+          <TableColumn fx:id="tcCorrelationId" prefWidth="148.99990844726562" text="Correlation Id" />
+            <TableColumn fx:id="tcPriority" prefWidth="53.99993896484375" text="Priority" />
+            <TableColumn fx:id="tcDelay" prefWidth="78.0" text="Delay" />
+            <TableColumn fx:id="tcEnqTime" prefWidth="84.99993896484375" text="Enqueue Time" />
+            <TableColumn fx:id="tcMessageBody" minWidth="1.00006103515625" prefWidth="499.00006103515625" text="Message Body" />
+            <TableColumn fx:id="tcRetryCount" prefWidth="76.0" text="Retry Count" />
+            <TableColumn fx:id="tcExecutionEnvironment" prefWidth="400.0" text="Execution Environment" />
+        </columns>
+      </TableView>
+      <HBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Button mnemonicParsing="false" onMouseClicked="#onButtonRefreshClicked" text="Refresh" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

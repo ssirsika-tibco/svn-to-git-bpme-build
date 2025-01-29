@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature id="com.tibco.bpm.se.api.feature" label="%featureName" version="1.3.0.qualifier" provider-name="%providerName">
+	<description>%description</description>
+	<copyright>%copyright</copyright>
+	<license url="%licenseURL">%license</license>
+	<requires>
+        <import feature="com.tibco.n2.logging.feature" version="1.17.0" match="compatible"/>
+		<import feature="com.tibco.bpm.logging.cloud.common.feature" version="1.5.0" match="compatible"/>
+		<!--Remove following 2 entries after https://jira.tibco.com/browse/ACE-2291 is fixed -->
+		<import feature="com.tibco.tpcl.org.apache.commons.beanutils.feature" version="1.7.100" match="equivalent"/>
+		<import feature="com.tibco.tpcl.org.apache.commons.lang.feature" version="2.4.100" match="equivalent"/>
+		<import feature="com.tibco.tpcl.javax.transaction.feature" version="1.3.0" match="compatible"/>
+    </requires>
+    <plugin id="com.tibco.bpm.se.api" download-size="0" install-size="0" version="1.3.0.qualifier" unpack="true"/>
+</feature>

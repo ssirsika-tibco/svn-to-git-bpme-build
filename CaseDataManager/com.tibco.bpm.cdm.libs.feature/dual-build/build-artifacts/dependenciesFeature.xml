@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feature id="com.tibco.bpm.cdm.libs.feature.eclipse.extension.site"
+         version="2.1.0.002.2025-01-24-1136"
+         label="com.tibco.bpm.cdm.libs.feature.eclipse Dependencies Feature">
+    <requires>
+    </requires>
+</feature>

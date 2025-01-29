@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://cxf.apache.org/configuration/beans"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://cxf.apache.org/configuration/beans 
+		http://cxf.apache.org/schemas/configuration/cxf-beans.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://cxf.apache.org/jaxrs 
+		http://cxf.apache.org/schemas/jaxrs.xsd
+        http://cxf.apache.org/core 
+        http://cxf.apache.org/schemas/core.xsd">
+
+	<bean id="transactionManagerProxy" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<bean id="daoFactory" name="daoFactory" class="com.tibco.bpm.cdm.core.dao.DAOFactory">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- REST impl for /cases -->
+	<bean id="casesServiceImplV1" class="com.tibco.bpm.cdm.core.rest.v1.CasesServiceImpl">
+		<property name="caseManager" ref="caseManager" />
+		<property name="securityService" ref="securityService"/>
+	</bean>	
+	
+	<!-- ...wrapped for transaction semantics -->
+	<bean id="casesServiceImplV1Tx"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManagerProxy" />
+		<property name="target" ref="casesServiceImplV1" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRES_NEW,-Exception</prop>
+			</props>
+		</property>
+	</bean>	
+	
+	<!-- REST impl for /types -->
+	<bean id="typesServiceImplV1" class="com.tibco.bpm.cdm.core.rest.v1.TypesServiceImpl">
+		<!-- <property name="dataModelManager" ref="dataModelManager" /> -->
+		<property name="typesServiceLocal" ref="typesServiceLocalTx" />
+	</bean>	
+
+	<!-- ...wrapped for transaction semantics -->
+	<!-- 
+	<bean id="typesServiceImplV1Tx"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManagerProxy" />
+		<property name="target" ref="typesServiceImplV1" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRES_NEW,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+	 -->
+	<!-- Impl for DEM's deployment interface -->	
+	<bean id="deploymentServiceImpl" class="com.tibco.bpm.cdm.core.deployment.DeploymentComponentServiceImpl">
+		<property name="deploymentManager" ref="deploymentManager" />
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+	
+	<!-- Impl for Admin's status interface -->
+	<bean id="componentStatusServiceImpl" class="com.tibco.bpm.cdm.core.admin.ComponentStatusServiceImpl">
+	</bean>
+	
+	<!-- Internal Deployment management bean -->
+	<bean id="deploymentManager" class="com.tibco.bpm.cdm.core.deployment.DeploymentManager">	
+		<property name="daoFactory" ref="daoFactory" />		
+	</bean>
+
+	<!-- List containing implementors of CaseLifecycleNotificationObserver that -->
+	<!-- expect to receive notifications when a relevant lifecycle event occurs for a case. -->
+	<!-- This bean is bridged to Blueprint, such that it can be populated by CLNObserverReferenceListener -->	
+	<bean id="clnObserverList" class="com.tibco.bpm.cdm.core.cln.CLNObserverList"/>
+
+	<!-- Dispatcher that calls registered observers with CLNs -->
+	<bean id="clnDispatcher" class="com.tibco.bpm.cdm.core.cln.CLNDispatcher">
+		<property name="clnObserverList" ref="clnObserverList"/>
+	</bean>
+	
+	<bean id="cdmPrivateAPI" class="com.tibco.bpm.cdm.core.CaseDataManagerImpl">
+		<property name="caseManager" ref="caseManager" />
+	</bean>
+	
+	<!-- ...wrapped for transaction semantics -->
+	
+	<!-- Private impl for /types -->
+	<bean id="typesServiceLocal" class="com.tibco.bpm.cdm.core.TypesPrivateServiceImpl">
+		<property name="dataModelManager" ref="dataModelManager" />
+	</bean>	
+
+	<!-- ...wrapped for transaction semantics -->
+	<bean id="typesServiceLocalTx"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManagerProxy" />
+		<property name="target" ref="typesServiceLocal" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRES_NEW,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+    <!-- (exposed via Blueprint as 'caseDataManagerService' -->
+	<bean id="cdmPrivateAPITx"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManagerProxy" />
+		<property name="target" ref="cdmPrivateAPI" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_MANDATORY</prop>
+			</props>
+		</property>
+	</bean>		
+	
+	<bean id="dataModelManager" class="com.tibco.bpm.cdm.core.deployment.DataModelManager">
+		<property name="daoFactory" ref="daoFactory" />		
+		<property name="securityService" ref="securityService"/>		
+	</bean>
+	
+	<bean id="daemonHandlerThread" class="com.tibco.bpm.cdm.core.CaseIdDaemonHandlerThread">
+	</bean>
+	
+	
+	
+	<bean id="caseSequenceCache" class="com.tibco.bpm.cdm.core.CaseSequenceCache">
+		<property name="daemonHandlerThread" ref="daemonHandlerThread" />		
+	</bean>
+	
+	<bean id="caseSequenceCacheTx"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManagerProxy" />
+		<property name="target" ref="caseSequenceCache" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRES_NEW</prop>
+			</props>
+		</property>
+	</bean>	
+	
+	<bean id="caseManager" class="com.tibco.bpm.cdm.core.CaseManager">
+		<property name="daoFactory" ref="daoFactory" />			
+		<property name="securityService" ref="securityService" />
+		<property name="clnDispatcher" ref="clnDispatcher" />
+		<property name="processInstancesAPI" ref="processInstancesAPI" />
+		<property name="caseSequenceCache" ref="caseSequenceCacheTx" />
+	</bean>
+	
+	<!-- Impl for Admin's property change notification interface -->
+	<bean id="propertyChangeServiceImpl" class="com.tibco.bpm.cdm.core.admin.PropertyChangeServiceImpl">
+		<property name="autoPurgeConfigChangeHandler" ref="autoPurgeConfigChangeHandler" />
+		<property name="caseSequenceCache" ref="caseSequenceCacheTx" />
+	</bean>
+	
+	<!-- ===================== -->
+	<!-- Script Engine Service -->
+	<!-- ===================== -->
+	
+	<bean id="scriptEngineService" class="com.tibco.bpm.cdm.core.script.ScriptEngineServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />	
+		<property name="cdmAPI" ref="cdmPrivateAPITx" />
+	</bean>
+	
+	<bean id="scriptEngineServiceTx"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManagerProxy" />
+		<property name="target" ref="scriptEngineService" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_MANDATORY</prop>
+			</props>
+		</property>
+	</bean>	
+	
+	<!-- ================== -->
+	<!-- Internal Job Queue -->
+	<!-- ================== -->
+
+	<bean id="jobQueue" class="com.tibco.bpm.cdm.core.queue.JobQueueImpl">
+		<property name="dataSource" ref="dataSource" />
+		<property name="notificationMonitor" ref="notificationMonitor" />
+	</bean>
+
+	<!-- Auto Purge config change handler-->
+
+	<bean id="autoPurgeConfigChangeHandler" class="com.tibco.bpm.cdm.core.autopurge.AutoPurgeConfigChangeHandler">
+		<property name="daoFactory" ref="daoFactory" />	
+		<property name="jobQueue" ref="jobQueue" />
+	</bean>
+
+	<!-- JobPerformer implementations to process jobs from the internal queue -->
+
+	<bean id="autoPurgeJobPerformer" class="com.tibco.bpm.cdm.core.queue.AutoPurgeJobPerformer" init-method="init">
+		<property name="jobQueue" ref="jobQueue"/>
+		<property name="dataModelManager" ref="dataModelManager" />
+		<property name="adminConfigurationService" ref="adminConfigurationService" />	
+		<property name="daoFactory" ref="daoFactory" />		
+	</bean>
+	
+	<bean id="autoPurgeApplicationJobPerformer" class="com.tibco.bpm.cdm.core.queue.AutoPurgeApplicationJobPerformer">
+		<property name="jobQueue" ref="jobQueue" />
+		<property name="daoFactory" ref="daoFactory" />	
+	</bean>
+	
+	<bean id="autoPurgeCaseTypeJobPerformer" class="com.tibco.bpm.cdm.core.queue.AutoPurgeCaseTypeJobPerformer">
+		<property name="jobQueue" ref="jobQueue" />
+		<property name="daoFactory" ref="daoFactory" />	
+		<property name="processInstancesAPI" ref="processInstancesAPI" />
+		<property name="adminConfigurationService" ref="adminConfigurationService" />		
+	</bean>
+	
+	<bean id="deleteCasesJobPerformer" class="com.tibco.bpm.cdm.core.queue.DeleteCasesJobPerformer">
+		<property name="caseManager" ref="caseManager" />
+	</bean>
+
+	<!-- This takes jobs off the queue and processes them. -->
+	<!-- It is transaction-wrapped (see jobQueueProcessorTx, below) -->
+	<bean id="jobQueueProcessor" class="com.tibco.bpm.cdm.core.queue.JobQueueProcessor">
+		<!-- The queue that we get jobs from -->
+		<property name="jobQueue" ref="jobQueue" />
+
+		<!-- Performers for the various types of job -->		
+		<property name="autoPurgeJobPerformer" ref="autoPurgeJobPerformer" />
+		<property name="autoPurgeApplicationJobPerformer" ref="autoPurgeApplicationJobPerformer" />
+		<property name="autoPurgeCaseTypeJobPerformer" ref="autoPurgeCaseTypeJobPerformer" />
+		<property name="deleteCasesJobPerformer" ref="deleteCasesJobPerformer" />
+	</bean>
+
+	<!-- This wraps jobQueueProcessor, so that if anything goes wrong during processing -->
+	<!-- of a job, the whole thing (including taking the job off the queue)	is rolled back -->
+	<!-- but it does not, crucially, kill the JobQueueProcessingThread -->
+	<bean id="jobQueueProcessorTx"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManagerProxy" />
+		<property name="target" ref="jobQueueProcessor" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="getNextJobAndProcessIt">PROPAGATION_REQUIRES_NEW,-Exception</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- This is a thread (started on init, stopped on destroy) and processing work -->
+	<!-- from the job queue via the transaction-wrapped JobQueueProcessor -->
+	<bean id="jobQueueProcessingThread" class="com.tibco.bpm.cdm.core.queue.JobQueueProcessingThread"
+		init-method="init" destroy-method="destroy">
+		<property name="jobQueueProcessor" ref="jobQueueProcessorTx" />
+		<property name="autoPurgeConfigChangeHandler" ref="autoPurgeConfigChangeHandler" />
+		<property name="adminConfigurationService" ref="adminConfigurationService" />		
+	</bean>
+</beans>

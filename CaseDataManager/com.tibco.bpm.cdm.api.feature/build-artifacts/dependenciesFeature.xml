@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feature id="com.tibco.bpm.cdm.api.feature.extension.site"
+         version="2.1.0.002.2024-11-27-0911"
+         label="com.tibco.bpm.cdm.api.feature Dependencies Feature">
+    <requires>
+        <import feature="com.tibco.tpcl.bpm.javax.ws.rs-api.feature"
+                version="2.2.0.003"
+                match="perfect" />
+    </requires>
+</feature>

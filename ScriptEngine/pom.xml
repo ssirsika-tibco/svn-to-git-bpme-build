@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.tibco.bpm.se</groupId>
+	<artifactId>script-engine-bld</artifactId>
+	<version>1.0.svn2git-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>ScriptEngine Micro Service</name>
+	<description>ScriptEngine MicroService implementation</description>
+	<parent>
+		<groupId>com.tibco.bpm</groupId>
+		<artifactId>bpme-root</artifactId>
+		<version>1.0.svn2git-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+
+
+	<properties>
+		<image.name>bpm-docker.emea.tibco.com:443/runtime/containeredition:1.0.dev</image.name>
+		<svn.base.url>https://emea-swi-svn.emea.tibco.com/svn/WBPM/ace</svn.base.url>
+		<branch>${svn.base.url}/trunk</branch>
+		<base.repository.dir>build-artifacts</base.repository.dir>
+	</properties>
+	
+	<modules>
+		<module>com.tibco.bpm.se.api.feature</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<!-- Clear 'build-artifact' directory -->
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.4.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${base.repository.dir}</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>				
+		</plugins>		
+	</build>
+</project>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="n2-build-targets">
+	<dirname property="n2-build-targets.dir" file="${ant.file.n2-build-targets}" />
+
+	<macrodef name="get.nested.property"> 
+		<attribute name="property" />
+		<attribute name="value" />
+		<sequential>
+			<property name="@{property}" value="${@{value}}"/>
+		</sequential>
+	</macrodef>
+	
+
+
+
+
+	<target name="site-update-uses-macro" if="build-site-update-macro" >
+		<update-local-builds-site-xml />
+	</target>
+
+
+
+
+
+	<target name="site-update-uses-target" unless="build-site-update-macro" >
+		<antcall target="-update-local-builds-site-xml" />
+	</target>
+
+
+
+
+
+	<macrodef name="purge.from.local.build.site"> 
+		<attribute name="pflbs.build.site" />
+		<sequential>
+			<for param="a-feature">
+				<dirset id="autobuild.feature-list" dir="${autobuild.dir.release-unit}/features">
+					<include name="*" />
+				</dirset>
+				<sequential>
+					<propertyregex property="feature.name" override="true" input="@{a-feature}" regexp="([^/\\]*$)" select="\1" />  
+
+					<property name="feature.xml" location="${autobuild.dir.release-unit}/features/${feature.name}/feature.xml"/>
+					<property name="plugin.names" location="${autobuild.dir.release-unit}/pluginsNames.properties"/>
+
+					<echo message="Purging all local builds of feature ${feature.name} from @{pflbs.build.site}"/>
+
+					<!-- We need to build a fileset of features and plugins to be deleted.   First we do the features as they are easy -->
+					<delete failonerror="false" verbose="true">
+						<fileset dir="@{pflbs.build.site}/features">
+							<include name="${feature}_*.jar"/>
+							<include name="${feature}.devdocs_*.jar"/>
+							<include name="${feature}.eclipse_*.jar"/>
+						</fileset>
+					</delete>
+
+					<!-- Now we need to build an include list of plugin names for this feature, which we do via XSLT -->
+					<xslt in="${feature.xml}" out="${plugin.names}" style="${n2-build-targets.dir}/getPluginNameIncludeList.xsl">
+						<param name="propname" expression="${feature.name}.plugin.names"/>
+					</xslt>
+
+					<property file="${plugin.names}"/>
+					<get.nested.property property="plugin.name.list" value="${feature.name}.plugin.names"/>
+					<delete file="${plugin.names}"/>
+
+					<delete failonerror="false" verbose="true">
+						<fileset dir="@{pflbs.build.site}/plugins" includes="${plugin.name.list}" />
+					</delete>
+					
+					<antcall target="site-update-uses-macro" />
+					<antcall target="site-update-uses-target" />
+
+					<echo message="Purged all local builds of feature ${feature.name} from @{pflbs.build.site}"/>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+
+
+
+
+	<macrodef name="update.all.bpm.feature.dependencies"> 
+		<sequential>
+			<for param="a-feature">
+				<dirset id="autobuild.feature-list" dir="${autobuild.dir.release-unit}/features">
+					<include name="*" />
+				</dirset>
+				<sequential>
+					<propertyregex property="feature.name" override="true" input="@{a-feature}" regexp="([^/\\]*$)" select="\1" />  
+
+					<property name="scripts.base" location="${autobuild.dir.release-unit}/../../N2Composite/installer"/>
+					<property name="macros.dir" location="${scripts.base}/supportScripts"/>
+					<property name="features.info.file" location="${scripts.base}/features-info.xml"/>
+					<property name="feature.xml" location="${autobuild.dir.release-unit}/features/${feature.name}/feature.xml"/>
+
+					<echo message="Updating feature.xml for feature ${feature.name} to the latest dependencies from features-info.xml"/>
+
+					<tempfile property="@{a-feature}.tempfile"/>
+
+					<xslt in="${feature.xml}" out="${@{a-feature}.tempfile}" style="${macros.dir}/featureVersionUpdate.xsl" force="true">
+						<param name="featuresinfofile" expression="${features.info.file}" />
+					</xslt>
+					<replaceregexp file="${@{a-feature}.tempfile}" match="@newline@" replace="${line.separator}" flags="g"/>
+					<move file="${@{a-feature}.tempfile}" tofile="${feature.xml}">
+						<filterchain>
+							<ignoreblank/>
+						</filterchain>
+					</move>
+					<fixcrlf file="${feature.xml}" eol="unix"/>
+
+					<echo message="Updated feature.xml for feature ${feature.name} to the latest dependencies from features-info.xml"/>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+
+
+
+
+	<macrodef name="update.features.info"> 
+		<sequential>
+			<for param="a-feature">
+				<dirset id="autobuild.feature-list" dir="${autobuild.dir.release-unit}/features">
+					<include name="*" />
+				</dirset>
+				<sequential>
+					<propertyregex property="feature.name" override="true" input="@{a-feature}" regexp="([^/\\]*$)" select="\1" />  
+
+					<property name="scripts.base" location="${autobuild.dir.release-unit}/../../N2Composite/installer"/>
+					<property name="macros.dir" location="${scripts.base}/supportScripts"/>
+					<property name="features.info.file" location="${scripts.base}/features-info.xml"/>
+					<property name="feature.xml" location="${autobuild.dir.release-unit}/features/${feature.name}/feature.xml"/>
+
+					<!-- Now load the feature xml as a property and get the version -->
+					<xmlproperty file="${feature.xml}" prefix="@{a-feature}"/>
+					<propertyregex property="feature.version" input="${@{a-feature}.feature(version)}" regexp="([0-9]*)\.([0-9]*)\.([0-9]*)\.(.*)" select="\1.\2.\3"/>
+
+					<echo message="Updating features-info file for feature: ${feature.name} with version ${feature.version}"/>
+
+					<tempfile property="@{a-feature}.tempfile"/>
+
+					<xslt in="${features.info.file}" out="${@{a-feature}.tempfile}" style="${macros.dir}/featuresInfoUpdate.xsl" force="true">
+						<param name="feature_name" expression="${feature.name}" />
+						<param name="feature_version" expression="${feature.version}" />
+					</xslt>
+					<replaceregexp file="${@{a-feature}.tempfile}" match="@newline@" replace="${line.separator}" flags="g"/>
+					<move file="${@{a-feature}.tempfile}" tofile="${features.info.file}">
+						<filterchain>
+							<ignoreblank/>
+						</filterchain>
+					</move>
+					<fixcrlf file="${features.info.file}" eol="unix"/>
+
+					<echo message="Updated features-info file for feature: ${feature.name} with version ${feature.version}"/>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+
+
+
+
+	<target name="purge-feature-builds" depends="-set-workspace-properties">
+		<condition property="build-site-update-macro" >
+			<typefound name="update-local-builds-site-xml"/>
+		</condition>
+		<purge.from.local.build.site pflbs.build.site="${autobuild.workspace.update-sites.local}" />
+		<purge.from.local.build.site pflbs.build.site="${autobuild.workspace.update-sites.local}-debug" />
+	</target>	
+
+
+
+
+
+	<target name="update-feature-dependencies" depends="-set-workspace-properties">
+		<condition property="build-site-update-macro" >
+			<typefound name="update-local-builds-site-xml"/>
+		</condition>
+
+		<update.all.bpm.feature.dependencies/>
+	</target>	
+
+
+
+
+
+	<target name="update-features-info" depends="-set-workspace-properties">
+		<condition property="build-site-update-macro" >
+			<typefound name="update-local-builds-site-xml"/>
+		</condition>
+
+		<update.features.info/>
+	</target>	
+</project>

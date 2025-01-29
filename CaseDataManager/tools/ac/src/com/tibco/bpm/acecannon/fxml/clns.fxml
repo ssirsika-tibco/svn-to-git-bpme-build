@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="235.0" prefWidth="525.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tibco.bpm.acecannon.controllers.CLNsController">
+   <children>
+      <TabPane prefHeight="200.0" prefWidth="420.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+          <Tab text="All">
+               <content>
+                  <TableView fx:id="tvAll">
+                    <columns>
+                      <TableColumn fx:id="colAllEvent" prefWidth="93.0" text="Event" />
+                      <TableColumn fx:id="colAllCaseReferences" prefWidth="700.0" text="Case References" />
+                    </columns>
+                  </TableView>
+               </content></Tab>
+          <Tab text="Updated">
+               <content>
+                  <TableView fx:id="tvUpdated">
+                    <columns>
+                      <TableColumn fx:id="colUpdatedEvent" prefWidth="93.0" text="Event" />
+                      <TableColumn fx:id="colUpdatedCaseReferences" prefWidth="700.0" text="Case References" />
+                    </columns>
+                  </TableView>
+               </content></Tab>
+          <Tab text="Deleted">
+               <content>
+                  <TableView fx:id="tvDeleted">
+                    <columns>
+                      <TableColumn fx:id="colDeletedEvent" prefWidth="93.0" text="Event" />
+                      <TableColumn fx:id="colDeletedCaseReferences" prefWidth="700.0" text="Case References" />
+                    </columns>
+                  </TableView>
+               </content></Tab>
+          
+          <Tab text="Updated &amp; Deleted">
+               <content>
+                  <TableView fx:id="tvUpdatedAndDeleted">
+                    <columns>
+                      <TableColumn fx:id="colUpdatedAndDeletedEvent" prefWidth="93.0" text="Event" />
+                      <TableColumn fx:id="colUpdatedAndDeletedCaseReferences" prefWidth="700.0" text="Case References" />
+                    </columns>
+                  </TableView>
+               </content></Tab>
+        </tabs>
+      </TabPane>
+      <HBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <Button fx:id="buttonFetch" mnemonicParsing="false" onMouseClicked="#onButtonFetchClicked" text="Fetch CLNs" />
+            <CheckBox fx:id="cbEnabled" mnemonicParsing="false" text="YY CLN Capture Enabled" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

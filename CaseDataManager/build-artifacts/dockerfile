@@ -1,0 +1,15 @@
+# Docker file for a base CDM image
+FROM bpm-docker.emea.tibco.com:443/infrastructure/karafbase:latest
+MAINTAINER CDM Team
+
+# The main RUN command will do the following all as one command to avoid having too many layers
+#
+#	1. Create a symlink to the karaf binary so we can start it
+#	2. Download the required kar files to the karaf deploy folder
+#   3. Set an environment variable with the MS_NAME variable set for CLF to use for logging
+#
+
+COPY "*.kar" "/opt/tibco/tibco-karaf-1.0.0-SNAPSHOT/deploy/"
+
+ENV MS_NAME ACE
+

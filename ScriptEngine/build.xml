@@ -1,0 +1,107 @@
+<project name="SERoot" xmlns:if="ant:if" xmlns:unless="ant:unless"  default="build" basedir=".">
+    <description>
+		Builds ScriptEngine Feature
+	</description>
+	<import file="${user.home}/tibco-build/user-overrides.xml" optional="false" />
+	<property environment="env"/>
+	<property name="env.BUILDER_HOME" value="${devtools.dir.base}"/>
+	<condition property="builder.isSet" value="true" else="false">
+		<isset property="env.BUILDER_HOME"/>
+	</condition>
+	<echo unless:set="env.BUILDER_HOME">!!!!!ERROR::BUILDER_HOME NOT SET!! Please Set BUILDER_HOME environment variable to point to top-level builder folder containing 'configurations' directory</echo>
+	<property name="tibco.builder" value="${devtools.dir.base}"/>
+	
+
+	<property name="se.api.feature" value="${tibco.builder}\candidates\BPM\ScriptEngine\com.tibco.bpm.se.api.feature"/>
+	<property name="build.dir" value="kar"/>
+	<property name="repository.dir" value="${build.dir}/repository/repository"/>
+	<property name="se.kar.dir" value="${repository.dir}\com\tibco\bpm\karaf\com.tibco.bpm.karaf.se-api-kar\1.3.0\com.tibco.bpm.karaf.se-api-kar-1.3.0"/>
+	
+  <target name="build" description="Builds ScriptEngine Features">
+    <ant inheritAll="false" antfile="build.xml" target="clean" dir="com.tibco.bpm.se.api.feature" />
+    <ant inheritAll="false" antfile="build.xml" target="build" dir="com.tibco.bpm.se.api.feature" />	
+  </target>
+  
+
+  <target name="kar" depends="build" description="Builds ScriptEngine feature and buids a kar file">
+		<delete file="${repository.dir}/com.tibco.bpm.se-api.kar"/>
+		<delete dir="${repository.dir}"/>
+		<mkdir dir="${repository.dir}"/>
+		<last id="se.api.dir">
+			<sort>
+				<date xmlns="antlib:org.apache.tools.ant.types.resources.comparators"/>
+				<resources>
+					<dirset dir="${se.api.feature}">
+						<include name="*"/>
+					</dirset>
+				</resources>
+			</sort>
+		</last>
+		<property name="se.api.repodir" value="${repository.dir}\com\tibco\bpm\karaf\ace\com.tibco.bpm.se.api\1.3.0"/>
+
+		<copy todir="${se.api.repodir}">
+			<fileset dir="${toString:se.api.dir}\jar\release\plugins">
+				<include name="com.tibco.bpm.se.api_1.3.0.*.jar"/>
+			</fileset>
+		</copy>
+		
+		<path id="se.jar"> 
+			<fileset dir="${se.api.repodir}"> 
+				<include name="*.jar"/> 
+			</fileset>
+		</path>
+		<property name="se.file" refid="se.jar"/>
+		<move file="${se.file}" tofile="${se.api.repodir}\com.tibco.bpm.se.api-1.3.0.jar"/>
+		<package-kar></package-kar>
+		
+	</target>
+
+	<target name="maven-kar" description="Builds all ScriptEngine features using maven and buids a kar file">
+		<delete file="${repository.dir}/com.tibco.bpm.se-api.kar"/>
+		<delete dir="${repository.dir}"/>
+	    <invoke.feature.maven.target.msg message="Building the feature using Maven" target="clean install package -Ptibco"/>
+		<copy todir="${build.dir}" includeEmptyDirs="true">
+            <fileset dir="build-artifacts">
+            </fileset>
+        </copy>
+		<package-kar></package-kar>
+	</target>
+
+	<macrodef name="invoke.feature.maven.target.msg">
+			<attribute name="message"/>
+			<attribute name="target"/>
+			<sequential>
+				<echo>
+	=======================================================================================
+
+	@{message}
+
+	=======================================================================================
+				</echo>
+
+				<exec executable="mvn" failonerror="true" vmlauncher="false">
+					<arg line="@{target}"/>
+				</exec>
+			</sequential>
+	</macrodef>  
+	  
+	<macrodef name="package-kar">
+		<sequential>
+			<mkdir dir="${se.kar.dir}"/>
+			<echoxml file="${se.kar.dir}\features.xml" append="false">
+				<features name="tibco.bpm.template-1.0.0">
+					<feature name="tibco.bpm.se" version="1.0.0" description="ScriptEngine feature">
+						<feature version="[2,3)">fasterxml</feature>
+						<feature version="[1,2)">tibco.bpm.template</feature>
+			
+						
+						<!-- Define our bundles -->
+						<bundle start-level="80">mvn:com.tibco.bpm.karaf/com.tibco.bpm.se.api/1.3.0</bundle>
+					</feature>
+				</features>
+			</echoxml>
+			<zip destfile="${build.dir}/com.tibco.bpm.se-api.zip" basedir="${build.dir}/repository"/>
+			<move file="${build.dir}/com.tibco.bpm.se-api.zip" tofile="${build.dir}/com.tibco.bpm.se-api.kar"/>
+		</sequential>
+	</macrodef>	
+</project>

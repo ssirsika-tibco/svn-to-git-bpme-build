@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="prebuild-cdm-dm" default="pre-dualbuild">
+	<dirname property="prebuild-cdm-dm.dir" file="${ant.dir.prebuild-cdm-dm}"/>
+
+	<property name="cdm.dm.plugin.name" value="com.tibco.bpm.cdm.dm"/>
+	<property name="dual.build.cdm.dm.plugin.dir" location="${prebuild-cdm-dm.dir}/plugins/${cdm.dm.plugin.name}"/>
+
+	<target name="-really-do-pre-dualbuild-shared" unless="is.dualbuild.feature">
+		<!-- If this is a model feature then there are two things we need to do here:
+			1. Copy the META-INF/MANIFEST.MF file to MANIFEST.MF.eclipse, changing any occurance of singleton:=false to singleton:=true in the target file
+		-->
+
+
+	</target>
+	
+	<target name="pre-dualbuild">
+		<!-- Find out if we are building a "dual build" feature, which means it should end in ".eclipse" -->
+		<condition property="is.dualbuild.feature" value="true">
+			<matches string="${release-unit}" pattern="\.eclipse$"/>
+		</condition>
+
+		<antcall target="-really-do-pre-dualbuild-shared"/>
+	</target>
+</project>

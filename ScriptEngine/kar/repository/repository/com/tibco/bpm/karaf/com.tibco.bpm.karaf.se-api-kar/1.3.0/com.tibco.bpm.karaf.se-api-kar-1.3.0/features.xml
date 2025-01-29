@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="tibco.bpm.template-1.0.0">
+  <feature description="ScriptEngine feature" name="tibco.bpm.se" version="1.0.0">
+    <feature version="[2,3)">fasterxml</feature>
+    <feature version="[1,2)">tibco.bpm.template</feature>
+    <bundle start-level="80">mvn:com.tibco.bpm.karaf/com.tibco.bpm.se.api/1.3.0</bundle>
+  </feature>
+</features>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<microservices>
+    <microservice name="Case Data Manager (CDM) Micro Service" description="CDM MicroService implementation">
+        <component name="Case Data Manager (CDM) Micro Service" url="https://emea-swi-svn.emea.tibco.com/svn/WBPM/ace/trunk/CaseDataManager" startRevision="26520" endRevision="26629"/>
+    </microservice>
+</microservices>

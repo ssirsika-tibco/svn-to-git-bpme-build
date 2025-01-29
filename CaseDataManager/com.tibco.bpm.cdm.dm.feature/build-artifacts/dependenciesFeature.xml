@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feature id="com.tibco.bpm.cdm.dm.feature.extension.site"
+         version="2.1.0.002.2024-11-27-0912"
+         label="com.tibco.bpm.cdm.dm.feature Dependencies Feature">
+    <requires>
+        <import feature="com.tibco.tpcl.com.fasterxml.jackson.feature"
+                version="2.9.6.001"
+                match="perfect" />
+        <import feature="com.tibco.tpcl.javax.system.exports.feature"
+                version="5.1.0.005"
+                match="perfect" />
+        <import feature="com.tibco.tpcl.org.eclipse.equinox.feature"
+                version="3.7.2.001"
+                match="perfect" />
+    </requires>
+</feature>
